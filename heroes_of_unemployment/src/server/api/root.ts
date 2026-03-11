@@ -1,4 +1,6 @@
+import { internshipRouter } from "H_o_R/server/api/routers/internship";
 import { postRouter } from "H_o_R/server/api/routers/post";
+import { trackerRouter } from "H_o_R/server/api/routers/tracker";
 import { createCallerFactory, createTRPCRouter } from "H_o_R/server/api/trpc";
 
 /**
@@ -8,6 +10,8 @@ import { createCallerFactory, createTRPCRouter } from "H_o_R/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
 	post: postRouter,
+	internship: internshipRouter,
+	tracker: trackerRouter,
 });
 
 // export type definition of API

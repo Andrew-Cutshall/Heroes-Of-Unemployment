@@ -55,15 +55,42 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum ApplicationStatus {
+    SAVED
+    APPLIED
+    INTERVIEW
+    OFFER
+    REJECTED
+}
+
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
+    id                  String               @id @default(cuid())
+    name                String?
+    email               String?              @unique
+    emailVerified       DateTime?
+    image               String?
+    accounts            Account[]
+    sessions            Session[]
+    posts               Post[]
+    trackedApplications TrackedApplication[]
+}
+
+model TrackedApplication {
+    id             String            @id @default(cuid())
+    userId         String
+    user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+    company        String
+    role           String
+    location       String
+    applicationUrl String
+    datePosted     String
+    source         String
+    status         ApplicationStatus @default(SAVED)
+    createdAt      DateTime          @default(now())
+    updatedAt      DateTime          @updatedAt
+
+    @@unique([userId, company, role, source])
+    @@index([userId])
 }
 
 model VerificationToken {
