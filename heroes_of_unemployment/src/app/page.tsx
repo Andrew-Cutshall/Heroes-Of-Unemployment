@@ -7,20 +7,19 @@ export default async function Home() {
 	const session = await auth();
 
 	void api.internship.getAll.prefetch();
+	void api.internship.getFilters.prefetch();
 
 	return (
 		<HydrateClient>
-			<div className="px-4 py-8">
-				<Suspense
-					fallback={
-						<div className="flex justify-center py-20">
-							<p className="text-gray-400">Loading internships...</p>
-						</div>
-					}
-				>
-					<InternshipFeed isLoggedIn={!!session?.user} />
-				</Suspense>
-			</div>
+			<Suspense
+				fallback={
+					<div className="flex justify-center py-20">
+						<p className="text-gray-400">Loading internships...</p>
+					</div>
+				}
+			>
+				<InternshipFeed isLoggedIn={!!session?.user} />
+			</Suspense>
 		</HydrateClient>
 	);
 }

@@ -115,19 +115,8 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
-
-exports.Prisma.PostScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdById: 'createdById'
-};
 
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
@@ -152,28 +141,45 @@ exports.Prisma.SessionScalarFieldEnum = {
   expires: 'expires'
 };
 
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  emailVerified: 'emailVerified',
-  image: 'image'
-};
-
 exports.Prisma.VerificationTokenScalarFieldEnum = {
   identifier: 'identifier',
   token: 'token',
   expires: 'expires'
 };
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  image: 'image',
+  xp: 'xp',
+  level: 'level'
+};
+
+exports.Prisma.InternshipScalarFieldEnum = {
+  id: 'id',
+  company: 'company',
+  role: 'role',
+  location: 'location',
+  applicationUrl: 'applicationUrl',
+  datePosted: 'datePosted',
+  daysAgo: 'daysAgo',
+  source: 'source',
+  isClosed: 'isClosed',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CompletedApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  internshipId: 'internshipId',
+  appliedAt: 'appliedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -183,11 +189,12 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  Post: 'Post',
   Account: 'Account',
   Session: 'Session',
+  VerificationToken: 'VerificationToken',
   User: 'User',
-  VerificationToken: 'VerificationToken'
+  Internship: 'Internship',
+  CompletedApplication: 'CompletedApplication'
 };
 
 /**
