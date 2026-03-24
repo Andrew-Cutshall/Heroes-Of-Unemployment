@@ -8,7 +8,7 @@ import { NavBar } from "./_components/nav-bar";
 
 export const metadata: Metadata = {
 	title: "Heroes of Unemployment",
-	description: "Browse CS internship listings and track your applications",
+	description: "Gamified internship tracker for CS students",
 	icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -27,7 +27,9 @@ export default async function RootLayout({
 			<body className="min-h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
 				<TRPCReactProvider>
 					<NavBar session={session} />
-					{children}
+					<main className="mx-auto max-w-5xl px-4 py-8">
+						{children}
+					</main>
 				</TRPCReactProvider>
 			</body>
 		</html>

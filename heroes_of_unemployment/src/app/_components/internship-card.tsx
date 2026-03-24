@@ -1,8 +1,7 @@
 "use client";
 
+import { useState } from "react";
 import { api } from "H_o_R/trpc/react";
-
-const STATUSES = ["SAVED", "APPLIED", "INTERVIEW", "OFFER", "REJECTED"] as const;
 
 interface InternshipCardProps {
 	internship: {
@@ -13,36 +12,27 @@ interface InternshipCardProps {
 		applicationUrl: string;
 		datePosted: string;
 		source: string;
-		badges: string[];
+		isClosed: boolean;
 	};
-	currentStatus?: string;
+	isApplied: boolean;
 	isLoggedIn: boolean;
 }
 
 export function InternshipCard({
 	internship,
-	currentStatus,
+	isApplied,
 	isLoggedIn,
 }: InternshipCardProps) {
+	const [xpFlash, setXpFlash] = useState(false);
 	const utils = api.useUtils();
 
-	const upsert = api.tracker.upsert.useMutation({
-		onSuccess: async () => {
-			await utils.tracker.getStatusMap.invalidate();
+	const markAsApplied = api.application.markAsApplied.useMutation({
+		onSuccess: () => {
+			void utils.application.getAppliedIds.invalidate();
+			setXpFlash(true);
+			setTimeout(() => setXpFlash(false), 1500);
 		},
 	});
-
-	const handleStatusChange = (status: string) => {
-		upsert.mutate({
-			company: internship.company,
-			role: internship.role,
-			location: internship.location,
-			applicationUrl: internship.applicationUrl,
-			datePosted: internship.datePosted,
-			source: internship.source,
-			status: status as (typeof STATUSES)[number],
-		});
-	};
 
 	return (
 		<div className="flex items-center gap-4 rounded-lg border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/[0.08]">
@@ -51,14 +41,14 @@ export function InternshipCard({
 					<span className="font-semibold text-white">
 						{internship.company}
 					</span>
-					{internship.badges.map((badge) => (
-						<span
-							key={badge}
-							className="rounded bg-purple-500/20 px-1.5 py-0.5 text-xs text-purple-300"
-						>
-							{badge}
+					<span className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-gray-400">
+						{internship.source}
+					</span>
+					{internship.isClosed && (
+						<span className="rounded bg-red-500/20 px-1.5 py-0.5 text-xs text-red-400">
+							Closed
 						</span>
-					))}
+					)}
 				</div>
 				<p className="text-sm text-gray-300">{internship.role}</p>
 				<div className="mt-1 flex items-center gap-3 text-xs text-gray-500">
@@ -69,24 +59,37 @@ export function InternshipCard({
 							<span>{internship.datePosted}</span>
 						</>
 					)}
-					<span>|</span>
-					<span>{internship.source}</span>
 				</div>
 			</div>
 			<div className="flex shrink-0 items-center gap-2">
+				{xpFlash && (
+					<span className="animate-bounce text-sm font-bold text-green-400">
+						+10 XP
+					</span>
+				)}
 				{isLoggedIn && (
-					<select
-						value={currentStatus ?? ""}
-						onChange={(e) => handleStatusChange(e.target.value)}
-						className="rounded border border-white/10 bg-white/5 px-2 py-1 text-xs text-white outline-none focus:border-purple-500"
-					>
-						<option value="">Track...</option>
-						{STATUSES.map((s) => (
-							<option key={s} value={s}>
-								{s.charAt(0) + s.slice(1).toLowerCase()}
-							</option>
-						))}
-					</select>
+					isApplied ? (
+						<span className="rounded-lg bg-green-600/20 px-3 py-1.5 text-xs font-medium text-green-400">
+							Applied
+						</span>
+					) : (
+						<button
+							type="button"
+							onClick={() =>
+								markAsApplied.mutate({
+									internshipId: internship.id,
+								})
+							}
+							disabled={
+								markAsApplied.isPending || internship.isClosed
+							}
+							className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-green-500 disabled:opacity-50"
+						>
+							{markAsApplied.isPending
+								? "..."
+								: "Mark as Applied"}
+						</button>
+					)
 				)}
 				{internship.applicationUrl && (
 					<a
