@@ -12,10 +12,16 @@ declare module "next-auth" {
 			level: number;
 		} & DefaultSession["user"];
 	}
+	interface User {
+		xp?: number;
+        level?: number;
+	}
 }
 
 export const authConfig = {
-	// Use credential-based auth (email + password stored in the database).
+	//Change for credientials provider, as this is based on email and password
+    session: { strategy: "jwt"}, //Web token to store session data
+
 	providers: [
 		CredentialsProvider({
 			name: "Credentials",
@@ -24,15 +30,13 @@ export const authConfig = {
 				password: { label: "Password", type: "password" },
 			},
 			authorize: async (credentials) => {
-				if (!credentials?.email || !credentials?.password) return null;
-
-				const user = await db.user.findUnique({ where: { email: credentials.email } });
+				const email = credentials?.email as string | undefined;
+				const password = credentials?.password as string | undefined;
+				if (!email || !password) return null;
+				const user = await db.user.findUnique({ where: { email } });
 				if (!user || !user.password) return null;
-
-				const valid = await bcrypt.compare(credentials.password, user.password);
-				if (!valid) return null;
-
-				// Return minimal user object - NextAuth will handle session creation via the adapter
+				const isValid = await bcrypt.compare(password, user.password);
+                if (!isValid) return null;
 				return {
 					id: user.id,
 					name: user.name ?? undefined,
@@ -44,18 +48,21 @@ export const authConfig = {
 	],
 	adapter: PrismaAdapter(db),
 	callbacks: {
-		session: async ({ session, user }) => {
-			const dbUser = await db.user.findUnique({
-				where: { id: user.id },
-				select: { xp: true, level: true },
-			});
+		jwt: async ({ token, user }) => {
+			if (user) {
+				token.id = user.id;
+				token.xp = user.xp;
+				token.level = user.level;
+			}
+			return token;
+		},
+		session: async ({ session, token }) => {
 			return {
 				...session,
 				user: {
 					...session.user,
-					id: user.id,
-					xp: dbUser?.xp ?? 0,
-					level: dbUser?.level ?? 1,
+					id: token.id as string,
+					xp: token.xp as number,
 				},
 			};
 		},
