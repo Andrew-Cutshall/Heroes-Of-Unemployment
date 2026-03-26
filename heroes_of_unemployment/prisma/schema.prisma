@@ -47,7 +47,9 @@ model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
+    password      String?
     emailVerified DateTime?
+    isAdmin	      Boolean   @default(false)
     image         String?
     xp            Int       @default(0)
     level         Int       @default(1)
