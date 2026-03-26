@@ -79,6 +79,7 @@ Run the app
 npm run dev
 # open http://localhost:3001
 ```
+Note: Ctr+C in powershell to stop the dev server, or the db server.
 
 - Build and preview:
 
