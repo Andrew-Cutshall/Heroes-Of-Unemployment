@@ -1,4 +1,8 @@
 import { auth } from "H_o_R/server/auth";
+import { api, HydrateClient } from "H_o_R/trpc/server";
+import { redirect } from "next/navigation";
+import { ProfileContent } from "H_o_R/app/_components/profile-content";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { api } from "H_o_R/trpc/server";
 import Link from "next/link";

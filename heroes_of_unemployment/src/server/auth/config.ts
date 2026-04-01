@@ -31,8 +31,8 @@ declare module "next-auth" {
 }
 
 export const authConfig = {
-	//Change for credientials provider, as this is based on email and password
-    session: { strategy: "jwt"}, //Web token to store session data
+    session: { strategy: "jwt" },
+	pages: { signIn: "/signin" },
 
 	providers: [
 		CredentialsProvider({
@@ -90,16 +90,9 @@ export const authConfig = {
 					id: token.id as string,
 					xp: token.xp as number,
 					level: token.level as number,
-					bio: token.bio as string | undefined,
-					website: token.website as string | undefined,
-					twitterHandle: token.twitterHandle as string | undefined,
-					school: token.school as string | undefined,
-					major: token.major as string | undefined,
-					graduationYear: token.graduationYear as number | null | undefined,
 				},
 			};
 		},
 	},
-	// Ensure a secret is provided via environment (AUTH_SECRET)
 	secret: process.env.AUTH_SECRET,
 } satisfies NextAuthConfig;

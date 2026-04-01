@@ -29,6 +29,7 @@ export function InternshipCard({
 	const markAsApplied = api.application.markAsApplied.useMutation({
 		onSuccess: () => {
 			void utils.application.getAppliedIds.invalidate();
+			void utils.application.getMyStats.invalidate();
 			setXpFlash(true);
 			setTimeout(() => setXpFlash(false), 1500);
 		},
