@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface NavBarProps {
 	session: {
 		user?: {
+			id?: string;
 			name?: string | null;
 			image?: string | null;
 			xp?: number;
@@ -14,9 +17,15 @@ interface NavBarProps {
 }
 
 export function NavBar({ session }: NavBarProps) {
+	const router = useRouter();
 	const xp = session?.user?.xp ?? 0;
 	const level = session?.user?.level ?? 1;
 	const xpInLevel = xp % 100;
+
+	const handleSignOut = async () => {
+		await signOut({ redirect: false });
+		router.push("/");
+	};
 
 	return (
 		<nav className="sticky top-0 z-50 border-b border-white/10 bg-[#15162c]/90 px-6 py-3 backdrop-blur-sm">
@@ -54,16 +63,36 @@ export function NavBar({ session }: NavBarProps) {
 							<span className="text-sm text-gray-300">
 								{session.user.name}
 							</span>
+							<Link
+								href="/profile"
+								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Profile
+							</Link>
+							<button
+								onClick={handleSignOut}
+								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Sign out
+							</button>
 						</>
 					)}
-					<Link
-						href={
-							session ? "/api/auth/signout" : "/api/auth/signin"
-						}
-						className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
-					>
-						{session ? "Sign out" : "Sign in"}
-					</Link>
+					{!session?.user && (
+						<>
+							<Link
+								href="/login"
+								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Sign in
+							</Link>
+							<Link
+								href="/register"
+								className="rounded-full bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-1.5 text-sm font-medium text-white transition hover:from-purple-700 hover:to-purple-800"
+							>
+								Register
+							</Link>
+						</>
+					)}
 				</div>
 			</div>
 		</nav>
