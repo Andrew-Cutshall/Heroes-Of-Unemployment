@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { api } from "H_o_R/trpc/react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface NavBarProps {
 	session: {
 		user?: {
+			id?: string;
 			name?: string | null;
 			image?: string | null;
 			xp?: number;
@@ -25,6 +28,11 @@ export function NavBar({ session }: NavBarProps) {
 	const xp = statsQuery.data?.xp ?? session?.user?.xp ?? 0;
 	const level = statsQuery.data?.level ?? session?.user?.level ?? 1;
 	const xpInLevel = xp % 100;
+
+	const handleSignOut = async () => {
+		await signOut({ redirect: false });
+		router.push("/");
+	};
 
 	return (
 		<nav className="sticky top-0 z-50 border-b border-white/10 bg-[#15162c]/90 px-6 py-3 backdrop-blur-sm">
@@ -86,6 +94,34 @@ export function NavBar({ session }: NavBarProps) {
 							<span className="text-sm text-gray-300">
 								{session.user.name}
 							</span>
+							<Link
+								href="/profile"
+								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Profile
+							</Link>
+							<button
+								onClick={handleSignOut}
+								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Sign out
+							</button>
+						</>
+					)}
+					{!session?.user && (
+						<>
+							<Link
+								href="/login"
+								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+							>
+								Sign in
+							</Link>
+							<Link
+								href="/register"
+								className="rounded-full bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-1.5 text-sm font-medium text-white transition hover:from-purple-700 hover:to-purple-800"
+							>
+								Register
+							</Link>
 						</>
 					)}
 					<Link

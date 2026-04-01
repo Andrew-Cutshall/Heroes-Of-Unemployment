@@ -10,11 +10,23 @@ declare module "next-auth" {
 			id: string;
 			xp: number;
 			level: number;
+			bio?: string;
+			website?: string;
+			twitterHandle?: string;
+			school?: string;
+			major?: string;
+			graduationYear?: number | null;
 		} & DefaultSession["user"];
 	}
 	interface User {
 		xp?: number;
         level?: number;
+		bio?: string;
+		website?: string;
+		twitterHandle?: string;
+		school?: string;
+		major?: string;
+		graduationYear?: number | null;
 	}
 }
 
@@ -42,6 +54,14 @@ export const authConfig = {
 					name: user.name ?? undefined,
 					email: user.email ?? undefined,
 					image: user.image ?? undefined,
+					xp: user.xp,
+					level: user.level,
+					bio: user.bio ?? undefined,
+					website: user.website ?? undefined,
+					twitterHandle: user.twitterHandle ?? undefined,
+					school: user.school ?? undefined,
+					major: user.major ?? undefined,
+					graduationYear: user.graduationYear,
 				};
 			},
 		}),
@@ -53,6 +73,12 @@ export const authConfig = {
 				token.id = user.id;
 				token.xp = user.xp;
 				token.level = user.level;
+				token.bio = user.bio;
+				token.website = user.website;
+				token.twitterHandle = user.twitterHandle;
+				token.school = user.school;
+				token.major = user.major;
+				token.graduationYear = user.graduationYear;
 			}
 			return token;
 		},

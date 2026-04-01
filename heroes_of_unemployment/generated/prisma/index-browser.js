@@ -156,7 +156,15 @@ exports.Prisma.UserScalarFieldEnum = {
   isAdmin: 'isAdmin',
   image: 'image',
   xp: 'xp',
-  level: 'level'
+  level: 'level',
+  bio: 'bio',
+  website: 'website',
+  twitterHandle: 'twitterHandle',
+  school: 'school',
+  major: 'major',
+  graduationYear: 'graduationYear',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.InternshipScalarFieldEnum = {

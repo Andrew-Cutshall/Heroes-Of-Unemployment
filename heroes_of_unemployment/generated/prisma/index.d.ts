@@ -4618,11 +4618,13 @@ export namespace Prisma {
   export type UserAvgAggregateOutputType = {
     xp: number | null
     level: number | null
+    graduationYear: number | null
   }
 
   export type UserSumAggregateOutputType = {
     xp: number | null
     level: number | null
+    graduationYear: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -4635,6 +4637,14 @@ export namespace Prisma {
     image: string | null
     xp: number | null
     level: number | null
+    bio: string | null
+    website: string | null
+    twitterHandle: string | null
+    school: string | null
+    major: string | null
+    graduationYear: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -4647,6 +4657,14 @@ export namespace Prisma {
     image: string | null
     xp: number | null
     level: number | null
+    bio: string | null
+    website: string | null
+    twitterHandle: string | null
+    school: string | null
+    major: string | null
+    graduationYear: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -4659,6 +4677,14 @@ export namespace Prisma {
     image: number
     xp: number
     level: number
+    bio: number
+    website: number
+    twitterHandle: number
+    school: number
+    major: number
+    graduationYear: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4666,11 +4692,13 @@ export namespace Prisma {
   export type UserAvgAggregateInputType = {
     xp?: true
     level?: true
+    graduationYear?: true
   }
 
   export type UserSumAggregateInputType = {
     xp?: true
     level?: true
+    graduationYear?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -4683,6 +4711,14 @@ export namespace Prisma {
     image?: true
     xp?: true
     level?: true
+    bio?: true
+    website?: true
+    twitterHandle?: true
+    school?: true
+    major?: true
+    graduationYear?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -4695,6 +4731,14 @@ export namespace Prisma {
     image?: true
     xp?: true
     level?: true
+    bio?: true
+    website?: true
+    twitterHandle?: true
+    school?: true
+    major?: true
+    graduationYear?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -4707,6 +4751,14 @@ export namespace Prisma {
     image?: true
     xp?: true
     level?: true
+    bio?: true
+    website?: true
+    twitterHandle?: true
+    school?: true
+    major?: true
+    graduationYear?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -4806,6 +4858,14 @@ export namespace Prisma {
     image: string | null
     xp: number
     level: number
+    bio: string | null
+    website: string | null
+    twitterHandle: string | null
+    school: string | null
+    major: string | null
+    graduationYear: number | null
+    createdAt: Date
+    updatedAt: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -4837,6 +4897,14 @@ export namespace Prisma {
     image?: boolean
     xp?: boolean
     level?: boolean
+    bio?: boolean
+    website?: boolean
+    twitterHandle?: boolean
+    school?: boolean
+    major?: boolean
+    graduationYear?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     completedApplications?: boolean | User$completedApplicationsArgs<ExtArgs>
@@ -4853,6 +4921,14 @@ export namespace Prisma {
     image?: boolean
     xp?: boolean
     level?: boolean
+    bio?: boolean
+    website?: boolean
+    twitterHandle?: boolean
+    school?: boolean
+    major?: boolean
+    graduationYear?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4865,6 +4941,14 @@ export namespace Prisma {
     image?: boolean
     xp?: boolean
     level?: boolean
+    bio?: boolean
+    website?: boolean
+    twitterHandle?: boolean
+    school?: boolean
+    major?: boolean
+    graduationYear?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -4877,9 +4961,17 @@ export namespace Prisma {
     image?: boolean
     xp?: boolean
     level?: boolean
+    bio?: boolean
+    website?: boolean
+    twitterHandle?: boolean
+    school?: boolean
+    major?: boolean
+    graduationYear?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "emailVerified" | "isAdmin" | "image" | "xp" | "level", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "emailVerified" | "isAdmin" | "image" | "xp" | "level" | "bio" | "website" | "twitterHandle" | "school" | "major" | "graduationYear" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -4906,6 +4998,14 @@ export namespace Prisma {
       image: string | null
       xp: number
       level: number
+      bio: string | null
+      website: string | null
+      twitterHandle: string | null
+      school: string | null
+      major: string | null
+      graduationYear: number | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -5341,6 +5441,14 @@ export namespace Prisma {
     readonly image: FieldRef<"User", 'String'>
     readonly xp: FieldRef<"User", 'Int'>
     readonly level: FieldRef<"User", 'Int'>
+    readonly bio: FieldRef<"User", 'String'>
+    readonly website: FieldRef<"User", 'String'>
+    readonly twitterHandle: FieldRef<"User", 'String'>
+    readonly school: FieldRef<"User", 'String'>
+    readonly major: FieldRef<"User", 'String'>
+    readonly graduationYear: FieldRef<"User", 'Int'>
+    readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -5559,7 +5667,7 @@ export namespace Prisma {
     /**
      * The data needed to create a User.
      */
-    data?: XOR<UserCreateInput, UserUncheckedCreateInput>
+    data: XOR<UserCreateInput, UserUncheckedCreateInput>
   }
 
   /**
@@ -8093,7 +8201,15 @@ export namespace Prisma {
     isAdmin: 'isAdmin',
     image: 'image',
     xp: 'xp',
-    level: 'level'
+    level: 'level',
+    bio: 'bio',
+    website: 'website',
+    twitterHandle: 'twitterHandle',
+    school: 'school',
+    major: 'major',
+    graduationYear: 'graduationYear',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -8388,6 +8504,14 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     xp?: IntFilter<"User"> | number
     level?: IntFilter<"User"> | number
+    bio?: StringNullableFilter<"User"> | string | null
+    website?: StringNullableFilter<"User"> | string | null
+    twitterHandle?: StringNullableFilter<"User"> | string | null
+    school?: StringNullableFilter<"User"> | string | null
+    major?: StringNullableFilter<"User"> | string | null
+    graduationYear?: IntNullableFilter<"User"> | number | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     completedApplications?: CompletedApplicationListRelationFilter
@@ -8403,6 +8527,14 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     xp?: SortOrder
     level?: SortOrder
+    bio?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    twitterHandle?: SortOrderInput | SortOrder
+    school?: SortOrderInput | SortOrder
+    major?: SortOrderInput | SortOrder
+    graduationYear?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     completedApplications?: CompletedApplicationOrderByRelationAggregateInput
@@ -8421,6 +8553,14 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     xp?: IntFilter<"User"> | number
     level?: IntFilter<"User"> | number
+    bio?: StringNullableFilter<"User"> | string | null
+    website?: StringNullableFilter<"User"> | string | null
+    twitterHandle?: StringNullableFilter<"User"> | string | null
+    school?: StringNullableFilter<"User"> | string | null
+    major?: StringNullableFilter<"User"> | string | null
+    graduationYear?: IntNullableFilter<"User"> | number | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     completedApplications?: CompletedApplicationListRelationFilter
@@ -8436,6 +8576,14 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     xp?: SortOrder
     level?: SortOrder
+    bio?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    twitterHandle?: SortOrderInput | SortOrder
+    school?: SortOrderInput | SortOrder
+    major?: SortOrderInput | SortOrder
+    graduationYear?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -8456,6 +8604,14 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     xp?: IntWithAggregatesFilter<"User"> | number
     level?: IntWithAggregatesFilter<"User"> | number
+    bio?: StringNullableWithAggregatesFilter<"User"> | string | null
+    website?: StringNullableWithAggregatesFilter<"User"> | string | null
+    twitterHandle?: StringNullableWithAggregatesFilter<"User"> | string | null
+    school?: StringNullableWithAggregatesFilter<"User"> | string | null
+    major?: StringNullableWithAggregatesFilter<"User"> | string | null
+    graduationYear?: IntNullableWithAggregatesFilter<"User"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type InternshipWhereInput = {
@@ -8806,6 +8962,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     completedApplications?: CompletedApplicationCreateNestedManyWithoutUserInput
@@ -8821,6 +8985,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     completedApplications?: CompletedApplicationUncheckedCreateNestedManyWithoutUserInput
@@ -8836,6 +9008,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     completedApplications?: CompletedApplicationUpdateManyWithoutUserNestedInput
@@ -8851,6 +9031,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     completedApplications?: CompletedApplicationUncheckedUpdateManyWithoutUserNestedInput
@@ -8866,6 +9054,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -8878,6 +9074,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -8890,6 +9094,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InternshipCreateInput = {
@@ -9332,11 +9544,20 @@ export namespace Prisma {
     image?: SortOrder
     xp?: SortOrder
     level?: SortOrder
+    bio?: SortOrder
+    website?: SortOrder
+    twitterHandle?: SortOrder
+    school?: SortOrder
+    major?: SortOrder
+    graduationYear?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
     xp?: SortOrder
     level?: SortOrder
+    graduationYear?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -9349,6 +9570,14 @@ export namespace Prisma {
     image?: SortOrder
     xp?: SortOrder
     level?: SortOrder
+    bio?: SortOrder
+    website?: SortOrder
+    twitterHandle?: SortOrder
+    school?: SortOrder
+    major?: SortOrder
+    graduationYear?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -9361,11 +9590,20 @@ export namespace Prisma {
     image?: SortOrder
     xp?: SortOrder
     level?: SortOrder
+    bio?: SortOrder
+    website?: SortOrder
+    twitterHandle?: SortOrder
+    school?: SortOrder
+    major?: SortOrder
+    graduationYear?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     xp?: SortOrder
     level?: SortOrder
+    graduationYear?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -9961,6 +10199,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     completedApplications?: CompletedApplicationCreateNestedManyWithoutUserInput
   }
@@ -9975,6 +10221,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     completedApplications?: CompletedApplicationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10005,6 +10259,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     completedApplications?: CompletedApplicationUpdateManyWithoutUserNestedInput
   }
@@ -10019,6 +10281,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     completedApplications?: CompletedApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10033,6 +10303,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     completedApplications?: CompletedApplicationCreateNestedManyWithoutUserInput
   }
@@ -10047,6 +10325,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     completedApplications?: CompletedApplicationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10077,6 +10363,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     completedApplications?: CompletedApplicationUpdateManyWithoutUserNestedInput
   }
@@ -10091,6 +10385,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     completedApplications?: CompletedApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10310,6 +10612,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -10324,6 +10634,14 @@ export namespace Prisma {
     image?: string | null
     xp?: number
     level?: number
+    bio?: string | null
+    website?: string | null
+    twitterHandle?: string | null
+    school?: string | null
+    major?: string | null
+    graduationYear?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10385,6 +10703,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -10399,6 +10725,14 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     xp?: IntFieldUpdateOperationsInput | number
     level?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twitterHandle?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    major?: NullableStringFieldUpdateOperationsInput | string | null
+    graduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
