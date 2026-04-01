@@ -44,15 +44,23 @@ model VerificationToken {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  emailVerified DateTime?
-  isAdmin       Boolean   @default(false)
-  image         String?
-  xp            Int       @default(0)
-  level         Int       @default(1)
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  password       String?
+  emailVerified  DateTime?
+  isAdmin        Boolean   @default(false)
+  image          String?
+  xp             Int       @default(0)
+  level          Int       @default(1)
+  bio            String?
+  website        String?
+  twitterHandle  String?
+  school         String?
+  major          String?
+  graduationYear Int?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   accounts              Account[]
   sessions              Session[]
