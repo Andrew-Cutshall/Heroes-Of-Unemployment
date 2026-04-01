@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { api } from "H_o_R/trpc/react";
 
 interface NavBarProps {
 	session: {
@@ -14,16 +16,46 @@ interface NavBarProps {
 }
 
 export function NavBar({ session }: NavBarProps) {
-	const xp = session?.user?.xp ?? 0;
-	const level = session?.user?.level ?? 1;
+	const pathname = usePathname();
+
+	const statsQuery = api.application.getMyStats.useQuery(undefined, {
+		enabled: !!session?.user,
+	});
+
+	const xp = statsQuery.data?.xp ?? session?.user?.xp ?? 0;
+	const level = statsQuery.data?.level ?? session?.user?.level ?? 1;
 	const xpInLevel = xp % 100;
 
 	return (
 		<nav className="sticky top-0 z-50 border-b border-white/10 bg-[#15162c]/90 px-6 py-3 backdrop-blur-sm">
 			<div className="mx-auto flex max-w-5xl items-center justify-between">
-				<Link href="/" className="text-lg font-bold text-white">
-					Heroes of Unemployment
-				</Link>
+				<div className="flex items-center gap-6">
+					<Link href="/" className="text-lg font-bold text-white">
+						Heroes of Unemployment
+					</Link>
+					<div className="flex gap-4">
+						<Link
+							href="/"
+							className={`text-sm transition ${pathname === "/" ? "text-purple-400" : "text-gray-400 hover:text-white"}`}
+						>
+							Feed
+						</Link>
+						<Link
+							href="/leaderboard"
+							className={`text-sm transition ${pathname === "/leaderboard" ? "text-purple-400" : "text-gray-400 hover:text-white"}`}
+						>
+							Leaderboard
+						</Link>
+						{session?.user && (
+							<Link
+								href="/profile"
+								className={`text-sm transition ${pathname === "/profile" ? "text-purple-400" : "text-gray-400 hover:text-white"}`}
+							>
+								Profile
+							</Link>
+						)}
+					</div>
+				</div>
 
 				<div className="flex items-center gap-4">
 					{session?.user && (
@@ -57,9 +89,7 @@ export function NavBar({ session }: NavBarProps) {
 						</>
 					)}
 					<Link
-						href={
-							session ? "/api/auth/signout" : "/api/auth/signin"
-						}
+						href={session ? "/api/auth/signout" : "/signin"}
 						className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
 					>
 						{session ? "Sign out" : "Sign in"}
