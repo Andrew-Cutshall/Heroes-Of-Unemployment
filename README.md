@@ -17,6 +17,9 @@ Prerequisites
 - npm
 - Git
 
+## Incase task doesn't stop
+ taskkill /F /IM node.exe
+
 Quick start
 1. Change into the project folder and install dependencies:
 

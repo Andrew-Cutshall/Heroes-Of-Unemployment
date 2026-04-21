@@ -31,7 +31,7 @@ export function NavBar({ session }: NavBarProps) {
 
 	const handleSignOut = async () => {
 		await signOut({ redirect: false });
-		router.push("/");
+		useRouter().push("/");
 	};
 
 	return (
@@ -100,22 +100,10 @@ export function NavBar({ session }: NavBarProps) {
 							>
 								Profile
 							</Link>
-							<button
-								onClick={handleSignOut}
-								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
-							>
-								Sign out
-							</button>
 						</>
 					)}
 					{!session?.user && (
 						<>
-							<Link
-								href="/login"
-								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
-							>
-								Sign in
-							</Link>
 							<Link
 								href="/register"
 								className="rounded-full bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-1.5 text-sm font-medium text-white transition hover:from-purple-700 hover:to-purple-800"

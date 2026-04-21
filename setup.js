@@ -65,13 +65,29 @@ async function main() {
 
     // Safely parse .env and inject AUTH_SECRET if missing
     let envContent = fs.readFileSync('.env', 'utf-8');
-    if (!envContent.includes('AUTH_SECRET=""')) {
+
+    // Regex to find the AUTH_SECRET line, no matter how it's formatted
+    const emptySecretRegex = /^AUTH_SECRET=(["']{0,2})\s*$/m;
+    const hasSecretRegex = /^AUTH_SECRET=.*$/m;
+
+    if (emptySecretRegex.test(envContent)) {
+        // If it exists but is blank, EDIT the line
+        console.log('Empty AUTH_SECRET found. Generating and updating...');
+        const secret = crypto.randomBytes(32).toString('base64');
+        envContent = envContent.replace(hasSecretRegex, `AUTH_SECRET="${secret}"`);
+        fs.writeFileSync('.env', envContent);
+        console.log('\x1b[32m✓ AUTH_SECRET securely generated and updated in .env\x1b[0m');
+
+    } else if (!hasSecretRegex.test(envContent)) {
+        // If it doesn't exist at all, APPEND it
         console.log('Generating and injecting AUTH_SECRET...');
         const secret = crypto.randomBytes(32).toString('base64');
         fs.appendFileSync('.env', `\nAUTH_SECRET="${secret}"\n`);
         console.log('\x1b[32m✓ AUTH_SECRET securely generated and added to .env\x1b[0m');
+
     } else {
-        console.log('\x1b[32m✓ AUTH_SECRET already detected in .env\x1b[0m');
+        // If it exists and already has a valid string, leave it alone
+        console.log('\x1b[32m✓ Valid AUTH_SECRET already detected in .env\x1b[0m');
     }
 
     // 4. Database Schema
@@ -79,10 +95,11 @@ async function main() {
     run('npm run db:generate');
     run('npm run db:push');
     run('npm run db:migrate');
+    run('npm run db:seed');
     
     await question('Press Enter to open Prisma Studio and start the Dev Server...');
     rl.close();
-
+    
     // 5. Boot Applications
     console.log('\n\x1b[33m[5/5] Booting up...\x1b[0m');
     
