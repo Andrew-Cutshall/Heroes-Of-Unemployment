@@ -20,12 +20,6 @@ export function parseDaysAgo(datePosted: string): number {
 	return 9999;
 }
 
-export const XP_PER_APPLICATION = 10;
-
-export function calculateLevel(xp: number): number {
-	return Math.floor(xp / 100) + 1;
-}
-
 export function extractText(html: string): string {
 	return html
 		.replace(/<br\s*\/?>/gi, ", ")

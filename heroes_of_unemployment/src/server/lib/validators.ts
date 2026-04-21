@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Password validation schema
 const passwordSchema = z
 	.string()
 	.min(8, "Password must be at least 8 characters")
@@ -8,7 +7,6 @@ const passwordSchema = z
 	.regex(/[a-z]/, "Password must contain at least one lowercase letter")
 	.regex(/[0-9]/, "Password must contain at least one number");
 
-// Registration input validation
 export const registerInputSchema = z
 	.object({
 		email: z.string().email("Invalid email address"),
@@ -23,7 +21,6 @@ export const registerInputSchema = z
 
 export type RegisterInput = z.infer<typeof registerInputSchema>;
 
-// Login input validation
 export const loginInputSchema = z.object({
 	email: z.string().email("Invalid email address"),
 	password: z.string().min(1, "Password is required"),
@@ -31,7 +28,6 @@ export const loginInputSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginInputSchema>;
 
-// Profile update validation
 export const updateProfileInputSchema = z.object({
 	name: z.string().min(2, "Name must be at least 2 characters").optional(),
 	bio: z.string().max(500, "Bio must be less than 500 characters").optional(),
@@ -54,7 +50,6 @@ export const updateProfileInputSchema = z.object({
 
 export type UpdateProfileInput = z.infer<typeof updateProfileInputSchema>;
 
-// Check email exists validation
 export const checkEmailSchema = z.object({
 	email: z.string().email("Invalid email address"),
 });

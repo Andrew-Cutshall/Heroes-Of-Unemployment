@@ -25,7 +25,6 @@ export function RegisterForm() {
 			...prev,
 			[name]: value,
 		}));
-		// Clear error for this field when user starts typing
 		if (errors[name]) {
 			setErrors((prev) => {
 				const newErrors = { ...prev };
@@ -81,7 +80,6 @@ export function RegisterForm() {
 		setIsLoading(true);
 
 		try {
-			// Register the user
 			await registerMutation.mutateAsync({
 				email: formData.email,
 				password: formData.password,
@@ -89,7 +87,6 @@ export function RegisterForm() {
 				name: formData.name || undefined,
 			});
 
-			// Redirect to login page
 			router.push("/login?registered=true");
 		} catch (error) {
 			if (error instanceof Error) {
@@ -125,23 +122,28 @@ export function RegisterForm() {
 	};
 
 	return (
-		<div className="w-full max-w-md rounded-lg border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
-			<h1 className="mb-6 text-2xl font-bold text-white">Create Account</h1>
+		<div className="rpg-panel rpg-panel-ornate w-full max-w-md p-8">
+			<p className="rpg-pixel mb-2 text-center text-[9px] text-[#d4af37]">
+				✦ FORGE A NEW LEGEND ✦
+			</p>
+			<h1 className="rpg-heading mb-1 text-center text-3xl">Begin Thy Quest</h1>
+			<p className="rpg-display mb-6 text-center text-sm text-[#d9c9a6]">
+				Pledge thy name to the great ledger of heroes.
+			</p>
 
 			{generalError && (
-				<div className="mb-4 rounded-lg border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-200">
+				<div className="mb-4 rounded-sm border border-red-500/60 bg-red-500/10 p-3 text-sm text-red-200">
 					{generalError}
 				</div>
 			)}
 
 			<form onSubmit={handleSubmit} className="space-y-4">
-				{/* Name Field */}
 				<div>
 					<label
 						htmlFor="name"
-						className="block text-sm font-medium text-gray-200"
+						className="rpg-pixel block text-[10px] text-[#d4af37]"
 					>
-						Full Name (Optional)
+						HERO NAME (OPTIONAL)
 					</label>
 					<input
 						type="text"
@@ -149,21 +151,20 @@ export function RegisterForm() {
 						name="name"
 						value={formData.name}
 						onChange={handleInputChange}
-						placeholder="John Doe"
-						className="mt-1 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-gray-400 outline-none transition hover:border-white/30 focus:border-purple-500/50 focus:bg-white/20"
+						placeholder="Sir Lancelot"
+						className="rpg-input mt-1 w-full rounded-sm px-3 py-2 placeholder-[#8a7a5a]"
 					/>
 					{errors.name && (
-						<p className="mt-1 text-xs text-red-400">{errors.name}</p>
+						<p className="mt-1 text-xs text-red-300">{errors.name}</p>
 					)}
 				</div>
 
-				{/* Email Field */}
 				<div>
 					<label
 						htmlFor="email"
-						className="block text-sm font-medium text-gray-200"
+						className="rpg-pixel block text-[10px] text-[#d4af37]"
 					>
-						Email
+						EMAIL
 					</label>
 					<input
 						type="email"
@@ -172,20 +173,19 @@ export function RegisterForm() {
 						value={formData.email}
 						onChange={handleInputChange}
 						placeholder="you@example.com"
-						className="mt-1 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-gray-400 outline-none transition hover:border-white/30 focus:border-purple-500/50 focus:bg-white/20"
+						className="rpg-input mt-1 w-full rounded-sm px-3 py-2 placeholder-[#8a7a5a]"
 					/>
 					{errors.email && (
-						<p className="mt-1 text-xs text-red-400">{errors.email}</p>
+						<p className="mt-1 text-xs text-red-300">{errors.email}</p>
 					)}
 				</div>
 
-				{/* Password Field */}
 				<div>
 					<label
 						htmlFor="password"
-						className="block text-sm font-medium text-gray-200"
+						className="rpg-pixel block text-[10px] text-[#d4af37]"
 					>
-						Password
+						PASSPHRASE
 					</label>
 					<input
 						type="password"
@@ -194,18 +194,19 @@ export function RegisterForm() {
 						value={formData.password}
 						onChange={handleInputChange}
 						placeholder="••••••••"
-						className="mt-1 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-gray-400 outline-none transition hover:border-white/30 focus:border-purple-500/50 focus:bg-white/20"
+						className="rpg-input mt-1 w-full rounded-sm px-3 py-2 placeholder-[#8a7a5a]"
 					/>
 					{formData.password && (
 						<div className="mt-2 flex items-center justify-between">
-							<p className="text-xs text-gray-400">
-								Strength: <span className="font-semibold text-gray-300">{getPasswordStrength()}</span>
+							<p className="rpg-pixel text-[9px] text-[#8a7a5a]">
+								STRENGTH:{" "}
+								<span className="text-[#f4c430]">{getPasswordStrength()}</span>
 							</p>
 							<div className="flex gap-1">
 								{[...Array(5)].map((_, i) => (
 									<div
 										key={i}
-										className={`h-1 w-1 rounded-full transition-colors ${
+										className={`h-1.5 w-3 transition-colors ${
 											i <
 											(getPasswordStrength() === "Strong"
 												? 5
@@ -216,8 +217,8 @@ export function RegisterForm() {
 														: getPasswordStrength() === "Weak"
 															? 2
 															: 1)
-												? "bg-purple-500"
-												: "bg-white/20"
+												? "bg-[#f4c430]"
+												: "bg-white/10"
 										}`}
 									/>
 								))}
@@ -225,17 +226,16 @@ export function RegisterForm() {
 						</div>
 					)}
 					{errors.password && (
-						<p className="mt-1 text-xs text-red-400">{errors.password}</p>
+						<p className="mt-1 text-xs text-red-300">{errors.password}</p>
 					)}
 				</div>
 
-				{/* Confirm Password Field */}
 				<div>
 					<label
 						htmlFor="confirmPassword"
-						className="block text-sm font-medium text-gray-200"
+						className="rpg-pixel block text-[10px] text-[#d4af37]"
 					>
-						Confirm Password
+						CONFIRM PASSPHRASE
 					</label>
 					<input
 						type="password"
@@ -244,29 +244,32 @@ export function RegisterForm() {
 						value={formData.confirmPassword}
 						onChange={handleInputChange}
 						placeholder="••••••••"
-						className="mt-1 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-gray-400 outline-none transition hover:border-white/30 focus:border-purple-500/50 focus:bg-white/20"
+						className="rpg-input mt-1 w-full rounded-sm px-3 py-2 placeholder-[#8a7a5a]"
 					/>
 					{errors.confirmPassword && (
-						<p className="mt-1 text-xs text-red-400">
+						<p className="mt-1 text-xs text-red-300">
 							{errors.confirmPassword}
 						</p>
 					)}
 				</div>
 
-				{/* Submit Button */}
 				<button
 					type="submit"
 					disabled={isLoading}
-					className="mt-6 w-full rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-2 font-medium text-white transition hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed"
+					className="rpg-button rpg-button-primary mt-6 w-full rounded-sm px-4 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
 				>
-					{isLoading ? "Creating Account..." : "Create Account"}
+					{isLoading ? "Inscribing…" : "⚜ Sign the Ledger"}
 				</button>
 			</form>
 
-			<p className="mt-4 text-center text-sm text-gray-400">
-				Already have an account?{" "}
-				<Link href="/login" className="font-medium text-purple-400 hover:text-purple-300">
-					Sign in
+			<div className="rpg-divider my-6" />
+			<p className="rpg-display text-center text-sm text-[#d9c9a6]">
+				Already sworn to the cause?{" "}
+				<Link
+					href="/login"
+					className="font-medium text-[#f4c430] hover:text-[#fff0a8]"
+				>
+					Return to the tavern
 				</Link>
 			</p>
 		</div>

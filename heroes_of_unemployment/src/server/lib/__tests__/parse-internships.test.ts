@@ -3,9 +3,7 @@ import {
 	parseInternships,
 	extractText,
 	extractHref,
-	calculateLevel,
 	parseDaysAgo,
-	XP_PER_APPLICATION,
 } from "../parse-internships";
 
 describe("extractText", () => {
@@ -131,28 +129,6 @@ describe("parseInternships", () => {
 	});
 });
 
-describe("calculateLevel", () => {
-	it("returns 1 for 0 XP", () => {
-		expect(calculateLevel(0)).toBe(1);
-	});
-
-	it("returns 1 for 99 XP", () => {
-		expect(calculateLevel(99)).toBe(1);
-	});
-
-	it("returns 2 for 100 XP", () => {
-		expect(calculateLevel(100)).toBe(2);
-	});
-
-	it("returns 3 for 250 XP", () => {
-		expect(calculateLevel(250)).toBe(3);
-	});
-
-	it("returns 11 for 1000 XP", () => {
-		expect(calculateLevel(1000)).toBe(11);
-	});
-});
-
 describe("parseDaysAgo", () => {
 	it("parses days", () => {
 		expect(parseDaysAgo("0d")).toBe(0);
@@ -176,8 +152,3 @@ describe("parseDaysAgo", () => {
 	});
 });
 
-describe("XP_PER_APPLICATION", () => {
-	it("equals 10", () => {
-		expect(XP_PER_APPLICATION).toBe(10);
-	});
-});
