@@ -1,5 +1,4 @@
 import { db } from "H_o_R/server/db";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -10,6 +9,7 @@ declare module "next-auth" {
 			id: string;
 			xp: number;
 			level: number;
+			isAdmin: boolean;
 			bio?: string;
 			website?: string;
 			twitterHandle?: string;
@@ -20,7 +20,8 @@ declare module "next-auth" {
 	}
 	interface User {
 		xp?: number;
-        level?: number;
+		level?: number;
+		isAdmin?: boolean;
 		bio?: string;
 		website?: string;
 		twitterHandle?: string;
@@ -32,7 +33,7 @@ declare module "next-auth" {
 
 export const authConfig = {
     session: { strategy: "jwt" },
-	pages: { signIn: "/signin" },
+	pages: { signIn: "/login" },
 
 	providers: [
 		CredentialsProvider({
@@ -56,6 +57,7 @@ export const authConfig = {
 					image: user.image ?? undefined,
 					xp: user.xp,
 					level: user.level,
+					isAdmin: user.isAdmin,
 					bio: user.bio ?? undefined,
 					website: user.website ?? undefined,
 					twitterHandle: user.twitterHandle ?? undefined,
@@ -66,13 +68,13 @@ export const authConfig = {
 			},
 		}),
 	],
-	adapter: PrismaAdapter(db),
 	callbacks: {
 		jwt: async ({ token, user }) => {
 			if (user) {
 				token.id = user.id;
 				token.xp = user.xp;
 				token.level = user.level;
+				token.isAdmin = user.isAdmin;
 				token.bio = user.bio;
 				token.website = user.website;
 				token.twitterHandle = user.twitterHandle;
@@ -90,6 +92,7 @@ export const authConfig = {
 					id: token.id as string,
 					xp: token.xp as number,
 					level: token.level as number,
+					isAdmin: (token.isAdmin as boolean) ?? false,
 				},
 			};
 		},

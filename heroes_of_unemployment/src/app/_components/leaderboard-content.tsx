@@ -1,59 +1,93 @@
 "use client";
 
 import { api } from "H_o_R/trpc/react";
+import { tierForLevel } from "H_o_R/server/lib/leveling";
 
-const RANK_COLORS: Record<number, string> = {
-	1: "text-yellow-400",
-	2: "text-gray-300",
-	3: "text-amber-600",
+const RANK_STYLE: Record<number, { color: string; label: string; glow: string }> = {
+	1: { color: "#f4c430", label: "👑", glow: "0 0 18px rgba(244,196,48,0.6)" },
+	2: { color: "#c0c0c0", label: "🥈", glow: "0 0 14px rgba(200,200,200,0.5)" },
+	3: { color: "#cd7f32", label: "🥉", glow: "0 0 12px rgba(205,127,50,0.5)" },
 };
 
 export function LeaderboardContent() {
 	const [users] = api.application.getLeaderboard.useSuspenseQuery();
 
 	return (
-		<div>
-			<h1 className="mb-6 text-xl font-bold text-white">Leaderboard</h1>
-			{users.length === 0 ? (
-				<p className="py-12 text-center text-gray-500">
-					No users yet. Be the first to sign up and earn XP!
+		<div className="space-y-4">
+			<div className="rpg-panel rpg-panel-ornate p-6 text-center">
+				<h1 className="rpg-heading text-3xl">🏆 Hall of Heroes 🏆</h1>
+				<p className="rpg-display mt-2 text-sm text-[#d9c9a6]">
+					The mightiest quest-takers in the realm, ranked by deeds and valor.
 				</p>
+			</div>
+
+			{users.length === 0 ? (
+				<div className="rpg-panel p-12 text-center">
+					<p className="rpg-display text-[#d9c9a6]">
+						No heroes yet. Be the first to enter the pantheon.
+					</p>
+				</div>
 			) : (
-				<div className="overflow-x-auto">
+				<div className="rpg-panel rpg-panel-ornate overflow-x-auto p-4">
 					<table className="w-full text-left text-sm">
 						<thead>
-							<tr className="border-b border-white/10 text-gray-400">
-								<th className="px-4 py-3 font-medium">#</th>
-								<th className="px-4 py-3 font-medium">Name</th>
-								<th className="px-4 py-3 font-medium">Level</th>
-								<th className="px-4 py-3 font-medium">XP</th>
-								<th className="px-4 py-3 font-medium">Applications</th>
+							<tr className="border-b border-[#d4af37]/30">
+								<th className="rpg-pixel px-4 py-3 text-[9px] text-[#d4af37]">
+									#
+								</th>
+								<th className="rpg-pixel px-4 py-3 text-[9px] text-[#d4af37]">
+									HERO
+								</th>
+								<th className="rpg-pixel px-4 py-3 text-[9px] text-[#d4af37]">
+									RANK
+								</th>
+								<th className="rpg-pixel px-4 py-3 text-[9px] text-[#d4af37]">
+									XP
+								</th>
+								<th className="rpg-pixel px-4 py-3 text-[9px] text-[#d4af37]">
+									QUESTS
+								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{users.map((user, i) => {
 								const rank = i + 1;
-								const rankColor = RANK_COLORS[rank] ?? "text-gray-500";
+								const style = RANK_STYLE[rank];
+								const tier = tierForLevel(user.level);
 								return (
 									<tr
 										key={user.id}
-										className={`border-b border-white/5 transition hover:bg-white/5 ${rank <= 3 ? "bg-white/[0.03]" : ""}`}
+										className={`border-b border-[#d4af37]/10 transition hover:bg-[#d4af37]/5 ${
+											rank <= 3 ? "bg-[#d4af37]/[0.04]" : ""
+										}`}
 									>
-										<td className={`px-4 py-3 font-bold ${rankColor}`}>
-											{rank}
+										<td
+											className="rpg-display px-4 py-3 text-xl font-bold"
+											style={{
+												color: style?.color ?? "#8a7a5a",
+												textShadow: style?.glow ?? "none",
+											}}
+										>
+											{style ? style.label : rank}
 										</td>
-										<td className="px-4 py-3 font-medium text-white">
-											{user.name ?? "Anonymous"}
+										<td className="rpg-display px-4 py-3 font-medium text-[#f5f1e4]">
+											{user.name ?? "Nameless Wanderer"}
 										</td>
 										<td className="px-4 py-3">
-											<span className="rounded bg-purple-600 px-2 py-0.5 text-xs font-bold text-white">
-												Lv.{user.level}
+											<span
+												className="tier-chip"
+												style={{
+													backgroundImage: `linear-gradient(180deg, ${tier.color}, ${tier.color}99)`,
+													color: "#0b0514",
+												}}
+											>
+												{tier.emoji} LV{user.level}
 											</span>
 										</td>
-										<td className="px-4 py-3 text-gray-300">
-											{user.xp}
+										<td className="rpg-pixel px-4 py-3 text-[11px] text-[#f4c430]">
+											{user.xp.toLocaleString()}
 										</td>
-										<td className="px-4 py-3 text-gray-400">
+										<td className="rpg-pixel px-4 py-3 text-[11px] text-[#d9c9a6]">
 											{user._count.completedApplications}
 										</td>
 									</tr>

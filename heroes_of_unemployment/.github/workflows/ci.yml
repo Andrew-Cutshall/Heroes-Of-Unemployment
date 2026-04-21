@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main, auth-profile-leaderboard]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: heroes_of_unemployment/package-lock.json
+      - name: Install dependencies
+        working-directory: heroes_of_unemployment
+        run: npm ci
+      - name: Prisma generate
+        working-directory: heroes_of_unemployment
+        run: npx prisma generate
+      - name: Biome check
+        working-directory: heroes_of_unemployment
+        run: npm run check
+        continue-on-error: true
+      - name: Run tests
+        working-directory: heroes_of_unemployment
+        run: npm run test

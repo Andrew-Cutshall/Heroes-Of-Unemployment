@@ -10,7 +10,9 @@ export default async function LeaderboardPage() {
 			<Suspense
 				fallback={
 					<div className="flex justify-center py-20">
-						<p className="text-gray-400">Loading leaderboard...</p>
+						<p className="rpg-display text-[#d9c9a6]">
+							✦ Summoning the pantheon…
+						</p>
 					</div>
 				}
 			>

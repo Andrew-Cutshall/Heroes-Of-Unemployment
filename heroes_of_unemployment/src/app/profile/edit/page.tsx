@@ -11,7 +11,6 @@ export const metadata = {
 export default async function EditProfilePage() {
 	const session = await auth();
 
-	// Redirect if not logged in
 	if (!session?.user?.id) {
 		redirect("/login");
 	}

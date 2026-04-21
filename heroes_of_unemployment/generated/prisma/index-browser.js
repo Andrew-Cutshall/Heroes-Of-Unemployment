@@ -177,7 +177,34 @@ exports.Prisma.InternshipScalarFieldEnum = {
   daysAgo: 'daysAgo',
   source: 'source',
   isClosed: 'isClosed',
+  createdAt: 'createdAt',
+  deadline: 'deadline',
+  categoryId: 'categoryId'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  color: 'color'
+};
+
+exports.Prisma.BadgeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  emoji: 'emoji',
+  xpReward: 'xpReward',
+  tier: 'tier',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.UserBadgeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  badgeId: 'badgeId',
+  earnedAt: 'earnedAt'
 };
 
 exports.Prisma.CompletedApplicationScalarFieldEnum = {
@@ -204,6 +231,9 @@ exports.Prisma.ModelName = {
   VerificationToken: 'VerificationToken',
   User: 'User',
   Internship: 'Internship',
+  Category: 'Category',
+  Badge: 'Badge',
+  UserBadge: 'UserBadge',
   CompletedApplication: 'CompletedApplication'
 };
 

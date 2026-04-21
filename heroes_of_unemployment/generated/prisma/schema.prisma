@@ -60,29 +60,66 @@ model User {
   major          String?
   graduationYear Int?
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  updatedAt      DateTime  @default(now()) @updatedAt
 
   accounts              Account[]
   sessions              Session[]
   completedApplications CompletedApplication[]
+  userBadges            UserBadge[]
 }
 
 model Internship {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   company        String
   role           String
   location       String
   applicationUrl String
   datePosted     String
-  daysAgo        Int      @default(0)
+  daysAgo        Int       @default(0)
   source         String
-  isClosed       Boolean  @default(false)
-  createdAt      DateTime @default(now())
+  isClosed       Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  deadline       DateTime?
+  categoryId     String?
+  category       Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   completedApplications CompletedApplication[]
 
   @@unique([company, role, source])
   @@index([company])
+  @@index([categoryId])
+}
+
+model Category {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  color       String       @default("#a855f7")
+  internships Internship[]
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  code        String      @unique
+  name        String
+  description String
+  emoji       String
+  xpReward    Int         @default(0)
+  tier        String      @default("bronze")
+  createdAt   DateTime    @default(now())
+  userBadges  UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([userId])
 }
 
 model CompletedApplication {

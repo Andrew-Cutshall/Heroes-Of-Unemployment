@@ -4,24 +4,43 @@ import { useState, useMemo, useEffect } from "react";
 import { api } from "H_o_R/trpc/react";
 import { InternshipCard } from "./internship-card";
 import { SearchBar } from "./search-bar";
+import { EmptyState } from "./empty-state";
+
+type SortBy = "recent" | "deadline";
 
 export function InternshipFeed({ isLoggedIn }: { isLoggedIn: boolean }) {
 	const [search, setSearch] = useState("");
 	const [locationFilter, setLocationFilter] = useState("");
 	const [sourceFilter, setSourceFilter] = useState("");
+	const [categorySlug, setCategorySlug] = useState("");
 	const [hideClosed, setHideClosed] = useState(false);
+	const [sortBy, setSortBy] = useState<SortBy>("recent");
 
 	const debouncedSearch = useDebounce(search, 300);
 	const debouncedLocation = useDebounce(locationFilter, 300);
 
-	const [internships] = api.internship.getAll.useSuspenseQuery({
-		search: debouncedSearch || undefined,
-		location: debouncedLocation || undefined,
-		source: sourceFilter || undefined,
-		hideClosed: hideClosed || undefined,
-	});
+	const feedQuery = api.internship.getAll.useInfiniteQuery(
+		{
+			search: debouncedSearch || undefined,
+			location: debouncedLocation || undefined,
+			source: sourceFilter || undefined,
+			categorySlug: categorySlug || undefined,
+			hideClosed: hideClosed || undefined,
+			sortBy,
+			limit: 50,
+		},
+		{
+			getNextPageParam: (last) => last.nextCursor ?? undefined,
+		},
+	);
 
-	const [filters] = api.internship.getFilters.useSuspenseQuery();
+	const internships = useMemo(
+		() => feedQuery.data?.pages.flatMap((p) => p.items) ?? [],
+		[feedQuery.data],
+	);
+
+	const filtersQuery = api.internship.getFilters.useQuery();
+	const categoriesQuery = api.category.list.useQuery();
 
 	const appliedIdsQuery = api.application.getAppliedIds.useQuery(undefined, {
 		enabled: isLoggedIn,
@@ -34,12 +53,10 @@ export function InternshipFeed({ isLoggedIn }: { isLoggedIn: boolean }) {
 
 	return (
 		<div className="space-y-4">
-			<div className="flex items-center justify-between">
-				<h1 className="text-xl font-bold text-white">
-					Internship Listings
-				</h1>
-				<span className="text-sm text-gray-400">
-					{internships.length} listings
+			<div className="flex items-center justify-between border-b border-[#d4af37]/20 pb-2">
+				<h2 className="rpg-heading text-2xl">📜 Quest Board</h2>
+				<span className="rpg-pixel text-[10px] text-[#d4af37]">
+					{internships.length} QUEST{internships.length === 1 ? "" : "S"} AVAILABLE
 				</span>
 			</div>
 			<SearchBar
@@ -49,15 +66,26 @@ export function InternshipFeed({ isLoggedIn }: { isLoggedIn: boolean }) {
 				onLocationFilterChange={setLocationFilter}
 				sourceFilter={sourceFilter}
 				onSourceFilterChange={setSourceFilter}
+				categorySlug={categorySlug}
+				onCategorySlugChange={setCategorySlug}
 				hideClosed={hideClosed}
 				onHideClosedChange={setHideClosed}
-				sources={filters.sources}
+				sortBy={sortBy}
+				onSortByChange={setSortBy}
+				sources={filtersQuery.data?.sources ?? []}
+				categories={categoriesQuery.data ?? []}
 			/>
 			<div className="space-y-2">
-				{internships.length === 0 ? (
-					<p className="py-8 text-center text-gray-500">
-						No internships found matching your filters.
+				{feedQuery.isLoading ? (
+					<p className="rpg-display py-8 text-center text-[#d9c9a6]">
+						✦ Consulting the ancient tomes…
 					</p>
+				) : internships.length === 0 ? (
+					<EmptyState
+						emoji="🔍"
+						title="No quests match your filters"
+						flavor="The scrolls are silent. Try broadening your search."
+					/>
 				) : (
 					internships.map((internship) => (
 						<InternshipCard
@@ -69,6 +97,18 @@ export function InternshipFeed({ isLoggedIn }: { isLoggedIn: boolean }) {
 					))
 				)}
 			</div>
+			{feedQuery.hasNextPage && (
+				<div className="flex justify-center pt-2">
+					<button
+						type="button"
+						onClick={() => feedQuery.fetchNextPage()}
+						disabled={feedQuery.isFetchingNextPage}
+						className="rpg-button rounded-sm px-6 py-2 text-sm disabled:opacity-50"
+					>
+						{feedQuery.isFetchingNextPage ? "Summoning…" : "Unfurl More Scrolls"}
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }

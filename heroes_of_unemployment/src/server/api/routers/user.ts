@@ -9,13 +9,11 @@ import {
 } from "H_o_R/server/lib/validators";
 
 export const userRouter = createTRPCRouter({
-	// Public: Register new user
 	register: publicProcedure
 		.input(registerInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { email, password, name } = input;
 
-			// Check if user already exists
 			const existingUser = await ctx.db.user.findUnique({
 				where: { email },
 			});
@@ -27,10 +25,8 @@ export const userRouter = createTRPCRouter({
 				});
 			}
 
-			// Hash password
 			const hashedPassword = await bcrypt.hash(password, 10);
 
-			// Create user
 			const user = await ctx.db.user.create({
 				data: {
 					email,
@@ -46,7 +42,6 @@ export const userRouter = createTRPCRouter({
 			};
 		}),
 
-	// Public: Check if email already exists
 	checkEmailExists: publicProcedure
 		.input(checkEmailSchema)
 		.query(async ({ ctx, input }) => {
@@ -59,7 +54,6 @@ export const userRouter = createTRPCRouter({
 			};
 		}),
 
-	// Protected: Get current user's full profile
 	getProfile: protectedProcedure.query(async ({ ctx }) => {
 		const user = await ctx.db.user.findUnique({
 			where: { id: ctx.session.user.id },
@@ -90,13 +84,11 @@ export const userRouter = createTRPCRouter({
 		return user;
 	}),
 
-	// Protected: Update user profile
 	updateProfile: protectedProcedure
 		.input(updateProfileInputSchema)
 		.mutation(async ({ ctx, input }) => {
-			// Filter out undefined values
 			const updateData = Object.fromEntries(
-				Object.entries(input).filter(([, value]) => value !== undefined)
+				Object.entries(input).filter(([, value]) => value !== undefined),
 			);
 
 			const user = await ctx.db.user.update({
@@ -118,10 +110,52 @@ export const userRouter = createTRPCRouter({
 				},
 			});
 
+			const complete = Boolean(
+				user.bio && user.school && user.major && user.graduationYear,
+			);
+			if (complete) {
+				const badge = await ctx.db.badge.findUnique({
+					where: { code: "PROFILE_COMPLETE" },
+				});
+				if (badge) {
+					const already = await ctx.db.userBadge.findUnique({
+						where: {
+							userId_badgeId: {
+								userId: ctx.session.user.id,
+								badgeId: badge.id,
+							},
+						},
+					});
+					if (!already) {
+						await ctx.db.userBadge.create({
+							data: {
+								userId: ctx.session.user.id,
+								badgeId: badge.id,
+							},
+						});
+						await ctx.db.user.update({
+							where: { id: ctx.session.user.id },
+							data: { xp: { increment: badge.xpReward } },
+						});
+					}
+				}
+			}
+
 			return user;
 		}),
 
-	// Protected: Get user stats
+	getMyBadges: protectedProcedure.query(async ({ ctx }) => {
+		const [earned, all] = await Promise.all([
+			ctx.db.userBadge.findMany({
+				where: { userId: ctx.session.user.id },
+				include: { badge: true },
+				orderBy: { earnedAt: "desc" },
+			}),
+			ctx.db.badge.findMany({ orderBy: { xpReward: "asc" } }),
+		]);
+		return { earned, all };
+	}),
+
 	getStats: protectedProcedure.query(async ({ ctx }) => {
 		const user = await ctx.db.user.findUnique({
 			where: { id: ctx.session.user.id },
@@ -142,7 +176,6 @@ export const userRouter = createTRPCRouter({
 		};
 	}),
 
-	// Protected: Get user's recent applications
 	getRecentApplications: protectedProcedure
 		.input(
 			z.object({

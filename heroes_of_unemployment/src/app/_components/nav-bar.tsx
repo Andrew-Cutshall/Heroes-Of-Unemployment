@@ -1,10 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { api } from "H_o_R/trpc/react";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import {
+	xpProgressInLevel,
+	tierForLevel,
+} from "H_o_R/server/lib/leveling";
 
 interface NavBarProps {
 	session: {
@@ -14,97 +18,122 @@ interface NavBarProps {
 			image?: string | null;
 			xp?: number;
 			level?: number;
+			isAdmin?: boolean;
 		};
 	} | null;
 }
 
 export function NavBar({ session }: NavBarProps) {
 	const pathname = usePathname();
+	const router = useRouter();
+	const [open, setOpen] = useState(false);
 
 	const statsQuery = api.application.getMyStats.useQuery(undefined, {
+		enabled: !!session?.user,
+	});
+	const badgesQuery = api.user.getMyBadges.useQuery(undefined, {
 		enabled: !!session?.user,
 	});
 
 	const xp = statsQuery.data?.xp ?? session?.user?.xp ?? 0;
 	const level = statsQuery.data?.level ?? session?.user?.level ?? 1;
-	const xpInLevel = xp % 100;
+	const progress = xpProgressInLevel(xp);
+	const tier = tierForLevel(level);
+	const latestBadge = badgesQuery.data?.earned[0];
 
 	const handleSignOut = async () => {
 		await signOut({ redirect: false });
 		router.push("/");
 	};
 
+	const linkClass = (active: boolean) =>
+		`rpg-display text-sm transition ${
+			active
+				? "text-[#f4c430] drop-shadow-[0_0_6px_rgba(244,196,48,0.6)]"
+				: "text-[#cbb9a0] hover:text-[#f4c430]"
+		}`;
+
+	const navLinks = (
+		<>
+			<Link href="/" className={linkClass(pathname === "/")}>
+				⚔ Quest Board
+			</Link>
+			<Link
+				href="/leaderboard"
+				className={linkClass(pathname === "/leaderboard")}
+			>
+				🏆 Hall of Heroes
+			</Link>
+			{session?.user && (
+				<Link href="/profile" className={linkClass(pathname === "/profile")}>
+					📜 Character
+				</Link>
+			)}
+			{session?.user?.isAdmin && (
+				<Link
+					href="/admin"
+					className={linkClass(pathname.startsWith("/admin"))}
+				>
+					👑 Dungeon Master
+				</Link>
+			)}
+		</>
+	);
+
 	return (
-		<nav className="sticky top-0 z-50 border-b border-white/10 bg-[#15162c]/90 px-6 py-3 backdrop-blur-sm">
-			<div className="mx-auto flex max-w-5xl items-center justify-between">
+		<nav className="sticky top-0 z-50 border-b border-[#d4af37]/30 bg-[#0a0620]/85 px-4 py-3 backdrop-blur-md md:px-6">
+			<div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#d4af37]/70 to-transparent" />
+			<div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
 				<div className="flex items-center gap-6">
-					<Link href="/" className="text-lg font-bold text-white">
-						Heroes of Unemployment
+					<Link
+						href="/"
+						className="rpg-heading text-lg drop-shadow-[0_0_8px_rgba(244,196,48,0.4)]"
+					>
+						⚜ Heroes of Unemployment
 					</Link>
-					<div className="flex gap-4">
-						<Link
-							href="/"
-							className={`text-sm transition ${pathname === "/" ? "text-purple-400" : "text-gray-400 hover:text-white"}`}
-						>
-							Feed
-						</Link>
-						<Link
-							href="/leaderboard"
-							className={`text-sm transition ${pathname === "/leaderboard" ? "text-purple-400" : "text-gray-400 hover:text-white"}`}
-						>
-							Leaderboard
-						</Link>
-						{session?.user && (
-							<Link
-								href="/profile"
-								className={`text-sm transition ${pathname === "/profile" ? "text-purple-400" : "text-gray-400 hover:text-white"}`}
-							>
-								Profile
-							</Link>
-						)}
-					</div>
+					<div className="hidden gap-5 md:flex">{navLinks}</div>
 				</div>
 
-				<div className="flex items-center gap-4">
+				<div className="flex items-center gap-2 md:gap-3">
 					{session?.user && (
 						<>
-							<div className="flex items-center gap-2">
-								<span className="rounded bg-purple-600 px-2 py-0.5 text-xs font-bold text-white">
-									Lv.{level}
+							<div className="hidden items-center gap-2 md:flex">
+								<span
+									className="tier-chip"
+									style={{
+										backgroundImage: `linear-gradient(180deg, ${tier.color}, ${tier.color}99)`,
+										color: "#0b0514",
+									}}
+									title={`${tier.tier} tier`}
+								>
+									{tier.emoji} LV{level}
 								</span>
+								{latestBadge && (
+									<span
+										className="text-lg rpg-float"
+										title={`Latest: ${latestBadge.badge.name}`}
+									>
+										{latestBadge.badge.emoji}
+									</span>
+								)}
 								<div className="flex items-center gap-1.5">
-									<div className="h-2 w-20 overflow-hidden rounded-full bg-white/10">
+									<div className="xp-gauge h-2.5 w-28">
 										<div
-											className="h-full rounded-full bg-purple-500 transition-all duration-500"
-											style={{ width: `${xpInLevel}%` }}
+											className="xp-gauge-fill"
+											style={{ width: `${progress.pct}%` }}
 										/>
 									</div>
-									<span className="text-xs text-gray-400">
-										{xp} XP
+									<span className="rpg-pixel text-[9px] text-[#f4c430]">
+										{progress.current}/{progress.needed}
 									</span>
 								</div>
 							</div>
-							{session.user.image && (
-								<img
-									src={session.user.image}
-									alt=""
-									className="h-7 w-7 rounded-full"
-								/>
-							)}
-							<span className="text-sm text-gray-300">
-								{session.user.name}
-							</span>
-							<Link
-								href="/profile"
-								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
-							>
-								Profile
-							</Link>
 							<button
+								type="button"
 								onClick={handleSignOut}
-								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+								className="rpg-button hidden rounded-sm px-3 py-1.5 text-xs md:inline-block"
 							>
-								Sign out
+								Flee
 							</button>
 						</>
 					)}
@@ -112,26 +141,69 @@ export function NavBar({ session }: NavBarProps) {
 						<>
 							<Link
 								href="/login"
-								className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+								className="rpg-button hidden rounded-sm px-3 py-1.5 text-xs md:inline-block"
 							>
-								Sign in
+								Enter Tavern
 							</Link>
 							<Link
 								href="/register"
-								className="rounded-full bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-1.5 text-sm font-medium text-white transition hover:from-purple-700 hover:to-purple-800"
+								className="rpg-button rpg-button-primary hidden rounded-sm px-3 py-1.5 text-xs md:inline-block"
 							>
-								Register
+								Begin Quest
 							</Link>
 						</>
 					)}
-					<Link
-						href={session ? "/api/auth/signout" : "/signin"}
-						className="rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+					<button
+						type="button"
+						aria-label="Toggle menu"
+						onClick={() => setOpen((v) => !v)}
+						className="rounded border border-[#d4af37]/40 p-2 text-[#f4c430] md:hidden"
 					>
-						{session ? "Sign out" : "Sign in"}
-					</Link>
+						{open ? "✕" : "☰"}
+					</button>
 				</div>
 			</div>
+
+			{open && (
+				<div className="mt-3 flex flex-col gap-3 border-t border-[#d4af37]/25 pt-3 md:hidden">
+					<div className="flex flex-col gap-2">{navLinks}</div>
+					{session?.user ? (
+						<div className="flex items-center justify-between">
+							<span
+								className="tier-chip"
+								style={{
+									backgroundImage: `linear-gradient(180deg, ${tier.color}, ${tier.color}99)`,
+									color: "#0b0514",
+								}}
+							>
+								{tier.emoji} LV{level}
+							</span>
+							<button
+								type="button"
+								onClick={handleSignOut}
+								className="rpg-button rounded-sm px-3 py-1 text-xs"
+							>
+								Flee
+							</button>
+						</div>
+					) : (
+						<div className="flex gap-2">
+							<Link
+								href="/login"
+								className="rpg-button rounded-sm px-3 py-1 text-xs"
+							>
+								Enter Tavern
+							</Link>
+							<Link
+								href="/register"
+								className="rpg-button rpg-button-primary rounded-sm px-3 py-1 text-xs"
+							>
+								Begin Quest
+							</Link>
+						</div>
+					)}
+				</div>
+			)}
 		</nav>
 	);
 }

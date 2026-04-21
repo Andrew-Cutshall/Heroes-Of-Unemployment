@@ -1,5 +1,6 @@
 import { PrismaClient } from "../generated/prisma";
 import { parseInternships, parseDaysAgo } from "../src/server/lib/parse-internships";
+import { BADGE_DEFINITIONS } from "../src/server/lib/badges";
 
 const SOURCES = [
 	{
@@ -49,6 +50,22 @@ async function main() {
 			});
 		}
 	}
+
+	console.log("Seeding badges...");
+	for (const def of BADGE_DEFINITIONS) {
+		await db.badge.upsert({
+			where: { code: def.code },
+			create: def,
+			update: {
+				name: def.name,
+				description: def.description,
+				emoji: def.emoji,
+				xpReward: def.xpReward,
+				tier: def.tier,
+			},
+		});
+	}
+	console.log(`Seeded ${BADGE_DEFINITIONS.length} badges.`);
 
 	console.log("Seed complete.");
 	await db.$disconnect();

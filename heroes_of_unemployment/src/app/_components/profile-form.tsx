@@ -45,7 +45,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 		}));
 		setHasChanges(true);
 
-		// Clear error for this field when user starts typing
 		if (errors[name]) {
 			setErrors((prev) => {
 				const newErrors = { ...prev };
@@ -117,7 +116,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 			setSuccessMessage("Profile updated successfully!");
 			setHasChanges(false);
 
-			// Clear success message after 3 seconds
 			setTimeout(() => setSuccessMessage(""), 3000);
 		} catch (error) {
 			if (error instanceof Error) {
@@ -145,7 +143,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 			)}
 
 			<form onSubmit={handleSubmit} className="space-y-5">
-				{/* Name Field */}
 				<div>
 					<label
 						htmlFor="name"
@@ -167,7 +164,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					)}
 				</div>
 
-				{/* Bio Field */}
 				<div>
 					<label
 						htmlFor="bio"
@@ -192,7 +188,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					)}
 				</div>
 
-				{/* Website Field */}
 				<div>
 					<label
 						htmlFor="website"
@@ -214,7 +209,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					)}
 				</div>
 
-				{/* Twitter Handle Field */}
 				<div>
 					<label
 						htmlFor="twitterHandle"
@@ -239,7 +233,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					)}
 				</div>
 
-				{/* School Field */}
 				<div>
 					<label
 						htmlFor="school"
@@ -258,7 +251,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					/>
 				</div>
 
-				{/* Major Field */}
 				<div>
 					<label
 						htmlFor="major"
@@ -277,7 +269,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					/>
 				</div>
 
-				{/* Graduation Year Field */}
 				<div>
 					<label
 						htmlFor="graduationYear"
@@ -301,7 +292,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 					)}
 				</div>
 
-				{/* Buttons */}
 				<div className="flex gap-3 pt-4">
 					<button
 						type="submit"
