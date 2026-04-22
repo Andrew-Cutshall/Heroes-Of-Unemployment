@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import {
 	createTRPCRouter,
 	protectedProcedure,
@@ -27,6 +28,33 @@ export const applicationRouter = createTRPCRouter({
 		.input(z.object({ internshipId: z.string() }))
 		.mutation(async ({ ctx, input }) => {
 			const userId = ctx.session.user.id;
+
+			const lastMinute = new Date(Date.now() - 60 * 1000);
+			const recentApps = await ctx.db.completedApplication.count({
+				where: { userId, appliedAt: { gte: lastMinute } },
+			});
+
+			if (recentApps >= 2) {
+				const user = await ctx.db.user.findUnique({
+					where: { id: userId },
+					select: { xp: true, level: true },
+				});
+				if (user) {
+					const penaltyXp = 15 + (user.level * 2); //Scaling Penalty based on level, no spamming.
+					const newXp = Math.max(0, user.xp - penaltyXp);
+					const newLevel = levelForXp(newXp);
+					await ctx.db.user.update({
+						where: { id: userId },
+						data: { xp: newXp, level: newLevel },
+					});
+
+					throw new TRPCError({
+						code: "TOO_MANY_REQUESTS",
+						message: `${penaltyXp}|Spam detected! The DM has penalized you with a trap!`,
+					});
+				}
+			}
+
 
 			return ctx.db.$transaction(async (tx) => {
 				const internship = await tx.internship.findUnique({
