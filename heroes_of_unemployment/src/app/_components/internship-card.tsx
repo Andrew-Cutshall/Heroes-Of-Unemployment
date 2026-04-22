@@ -180,7 +180,7 @@ export function InternshipCard({
 								onClick={() => setHasOpenedLink(true)}
 								className="rpg-button rpg-button-primary rounded-sm px-3 py-1.5 text-xs"
 							>
-								Begin Quest
+								Begin Quest ⚔ Apply
 							</a>
 						) 
 					) : (
@@ -207,7 +207,7 @@ export function InternshipCard({
 								)}
 							</div>
 					))}
-				{internship.applicationUrl && (
+				{internship.applicationUrl && !isLoggedIn && (
 					<a
 						href={internship.applicationUrl}
 						target="_blank"
