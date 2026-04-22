@@ -4,29 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { api } from "H_o_R/trpc/react";
-import { signOut } from "next-auth/react";
-import {
-	xpProgressInLevel,
-	tierForLevel,
-} from "H_o_R/server/lib/leveling";
+import { signOut, useSession } from "next-auth/react";
+import {xpProgressInLevel, tierForLevel } from "H_o_R/server/lib/leveling";
 
-interface NavBarProps {
-	session: {
-		user?: {
-			id?: string;
-			name?: string | null;
-			image?: string | null;
-			xp?: number;
-			level?: number;
-			isAdmin?: boolean;
-		};
-	} | null;
-}
-
-export function NavBar({ session }: NavBarProps) {
+export function NavBar() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
+	const { data: session } = useSession();
 
 	const statsQuery = api.application.getMyStats.useQuery(undefined, {
 		enabled: !!session?.user,
@@ -43,6 +28,7 @@ export function NavBar({ session }: NavBarProps) {
 
 	const handleSignOut = async () => {
 		await signOut({ redirect: false });
+		router.refresh();
 		router.push("/");
 	};
 
