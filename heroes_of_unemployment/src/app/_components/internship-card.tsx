@@ -38,6 +38,7 @@ export function InternshipCard({
 	isLoggedIn,
 }: InternshipCardProps) {
 	const [xpFlash, setXpFlash] = useState<number | null>(null);
+	const [hasOpenedLink, setHasOpenedLink] = useState(false);
 	const utils = api.useUtils();
 
 	const markAsApplied = api.application.markAsApplied.useMutation({
@@ -151,6 +152,18 @@ export function InternshipCard({
 						<span className="rpg-pixel rounded border border-[#10b981]/60 bg-[#10b981]/15 px-3 py-1.5 text-[10px] text-[#6ee7b7]">
 							✓ CLAIMED
 						</span>
+				) : !hasOpenedLink ? (
+						internship.applicationUrl && (
+							<a
+								href={internship.applicationUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={() => setHasOpenedLink(true)}
+								className="rpg-button rpg-button-primary rounded-sm px-3 py-1.5 text-xs"
+							>
+								Begin Quest
+							</a>
+						) 
 					) : (
 						<button
 							type="button"
@@ -160,7 +173,7 @@ export function InternshipCard({
 							disabled={markAsApplied.isPending || internship.isClosed}
 							className="rpg-button rounded-sm px-3 py-1.5 text-xs disabled:opacity-50"
 						>
-							{markAsApplied.isPending ? "…" : "Accept Quest"}
+							{markAsApplied.isPending ? "…" : "Quest Completed?"}
 						</button>
 					))}
 				{internship.applicationUrl && (
