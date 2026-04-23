@@ -53,6 +53,14 @@ Source lives in `heroes_of_unemployment/`.
 
 Requirements: Node 20+ (18 might work, we test on 20), npm, Git.
 
+*As of 4/21 you can simple run this command in the root directory, and it'll go through a quick setup
+```bash
+node localHostEasySetup
+```
+Using Ctrl + C in the terminal stops it. It will auto open Prisma Studio, and afterwards it will open the localhost site.
+
+*Old Method
+
 ```bash
 cd heroes_of_unemployment
 npm install

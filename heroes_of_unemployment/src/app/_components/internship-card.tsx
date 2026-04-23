@@ -38,6 +38,9 @@ export function InternshipCard({
 	isLoggedIn,
 }: InternshipCardProps) {
 	const [xpFlash, setXpFlash] = useState<number | null>(null);
+	const [isPenalized, setIsPenalized] = useState(false);
+	const [penaltyVal, setPenaltyVal] = useState<number>(0);
+	const [hasOpenedLink, setHasOpenedLink] = useState(false);
 	const utils = api.useUtils();
 
 	const markAsApplied = api.application.markAsApplied.useMutation({
@@ -74,6 +77,17 @@ export function InternshipCard({
 			for (const b of result.newBadges) {
 				toast.success(`${b.emoji} ${b.name}`, { description: b.description });
 			}
+		},
+		onError: (error) => {
+			const [value, message] = error.message.split("|");
+			toast.error(message);
+			const numVal = value ? parseInt(value) : 25;
+            setIsPenalized(true); //Penalty Trigger
+			setPenaltyVal(numVal); // Amount lost
+			setTimeout(() => {
+				setIsPenalized(false);
+				setHasOpenedLink(false);}, 800);
+			void utils.application.getMyStats.invalidate();
 		},
 	});
 
@@ -146,24 +160,54 @@ export function InternshipCard({
 						+{xpFlash} XP
 					</span>
 				)}
+
+				{isPenalized && (
+					<span className="rpg-pixel animate-bounce text-xs font-bold text-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]">
+						-{penaltyVal} XP
+					</span>
+				)}
 				{isLoggedIn &&
 					(isApplied ? (
 						<span className="rpg-pixel rounded border border-[#10b981]/60 bg-[#10b981]/15 px-3 py-1.5 text-[10px] text-[#6ee7b7]">
 							✓ CLAIMED
 						</span>
+				) : !hasOpenedLink ? (
+						internship.applicationUrl && (
+							<a
+								href={internship.applicationUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={() => setHasOpenedLink(true)}
+								className="rpg-button rpg-button-primary rounded-sm px-3 py-1.5 text-xs"
+							>
+								Begin Quest ⚔ Apply
+							</a>
+						) 
 					) : (
-						<button
-							type="button"
-							onClick={() =>
-								markAsApplied.mutate({ internshipId: internship.id })
-							}
-							disabled={markAsApplied.isPending || internship.isClosed}
-							className="rpg-button rounded-sm px-3 py-1.5 text-xs disabled:opacity-50"
-						>
-							{markAsApplied.isPending ? "…" : "Accept Quest"}
-						</button>
+							<div className={`flex items-center gap-2 transition-all duration-300 ${isPenalized ? "scale-95" : "scale-100"}`}>
+								<button
+									type="button"
+									onClick={() => markAsApplied.mutate({ internshipId: internship.id })}
+									disabled={markAsApplied.isPending || internship.isClosed || isPenalized}
+									className={`rpg-button rounded-sm px-3 py-1.5 text-xs transition-all ${isPenalized
+											? "border-red-600 bg-red-900/40 text-red-400 animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.8)]"
+											: "text-[#10b981] border-[#10b981]/50 hover:bg-[#10b981]/10"
+										}`}
+								>
+									{markAsApplied.isPending ? "…" : isPenalized ? "TRAPPED!" : "Confirm Applied"}
+								</button>
+								{!isPenalized && (
+									<button
+										type="button"
+										onClick={() => setHasOpenedLink(false)}
+										className="text-[10px] text-[#8a7a5a] hover:text-[#d9c9a6] underline"
+									>
+										Cancel
+									</button>
+								)}
+							</div>
 					))}
-				{internship.applicationUrl && (
+				{internship.applicationUrl && !isLoggedIn && (
 					<a
 						href={internship.applicationUrl}
 						target="_blank"

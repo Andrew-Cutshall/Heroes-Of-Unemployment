@@ -6,6 +6,7 @@ import { Geist, MedievalSharp, Press_Start_2P } from "next/font/google";
 import { auth } from "H_o_R/server/auth";
 import { NavBar } from "./_components/nav-bar";
 import { Toaster } from "sonner";
+import { NextAuthProvider } from "./_components/session-provider";
 
 export const metadata: Metadata = {
 	title: "Heroes of Unemployment",
@@ -43,9 +44,11 @@ export default async function RootLayout({
 		>
 			<body suppressHydrationWarning>
 				<TRPCReactProvider>
-					<NavBar session={session} />
-					<main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
-					<Toaster richColors position="top-right" theme="dark" />
+					<NextAuthProvider>
+						<NavBar/>
+						<main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+						<Toaster richColors position="top-right" theme="dark" />
+					</NextAuthProvider>
 				</TRPCReactProvider>
 			</body>
 		</html>
