@@ -32,6 +32,20 @@ function daysUntil(date: Date | string): number {
 	return Math.ceil(ms / (24 * 60 * 60 * 1000));
 }
 
+function formatTimeUntil(days: number): string {
+	const months = Math.floor(days / 30);
+	const remaining = days % 30;
+	const weeks = Math.floor(remaining / 7);
+	const d = remaining % 7;
+
+	const parts: string[] = [];
+	if (months > 0) parts.push(`${months} month${months === 1 ? "" : "s"}`);
+	if (weeks > 0) parts.push(`${weeks} week${weeks === 1 ? "" : "s"}`);
+	if (d > 0 || parts.length === 0) parts.push(`${d} day${d === 1 ? "" : "s"}`);
+
+	return parts.join(" ");
+}
+
 export function InternshipCard({
 	internship,
 	isApplied,
@@ -134,7 +148,7 @@ export function InternshipCard({
 									: "bg-amber-900/40 text-amber-300"
 							}`}
 						>
-							⏱ {daysLeft}D LEFT
+							⏱ Quest is due in {formatTimeUntil(daysLeft)}
 						</span>
 					)}
 					{overdue && (
@@ -142,16 +156,15 @@ export function InternshipCard({
 							EXPIRED
 						</span>
 					)}
+					{daysLeft === null && (
+						<span className="rpg-pixel rounded bg-slate-900/40 px-1.5 py-0.5 text-[9px] text-slate-400">
+							📜 Unknown deadline
+						</span>
+					)}
 				</div>
 				<p className="mt-1 text-sm text-[#d9c9a6]">{internship.role}</p>
 				<div className="mt-1 flex items-center gap-3 text-xs text-[#8a7a5a]">
 					<span>📍 {internship.location}</span>
-					{internship.datePosted && (
-						<>
-							<span>·</span>
-							<span>📆 {internship.datePosted}</span>
-						</>
-					)}
 				</div>
 			</div>
 			<div className="flex shrink-0 items-center gap-2">

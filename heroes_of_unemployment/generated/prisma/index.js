@@ -220,7 +220,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\manas\\Downloads\\Heroes-Of-Unemployment-main\\heroes_of_unemployment\\generated\\prisma",
+      "value": "C:\\Users\\dskal\\VSCode_Projects\\Heroes-Of-Unemployment\\heroes_of_unemployment\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -234,7 +234,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\manas\\Downloads\\Heroes-Of-Unemployment-main\\heroes_of_unemployment\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\dskal\\VSCode_Projects\\Heroes-Of-Unemployment\\heroes_of_unemployment\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
