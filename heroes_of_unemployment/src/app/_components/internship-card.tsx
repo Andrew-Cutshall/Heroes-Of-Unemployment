@@ -158,7 +158,7 @@ export function InternshipCard({
 					)}
 					{daysLeft === null && (
 						<span className="rpg-pixel rounded bg-slate-900/40 px-1.5 py-0.5 text-[9px] text-slate-400">
-							📜 Unknown deadline
+							📜 Rolling Application
 						</span>
 					)}
 				</div>
