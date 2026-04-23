@@ -1,13 +1,14 @@
 import { auth } from "H_o_R/server/auth";
 import { api } from "H_o_R/trpc/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 import {
 	xpProgressInLevel,
 	tierForLevel,
 } from "H_o_R/server/lib/leveling";
 import { BadgeGrid } from "H_o_R/app/_components/badge-grid";
-import { EmptyState } from "H_o_R/app/_components/empty-state";
+import { QuestLog } from "H_o_R/app/_components/quest-log";
 
 export const metadata = {
 	title: "Character Sheet - Heroes of Unemployment",
@@ -23,7 +24,6 @@ export default async function ProfilePage() {
 
 	const userProfile = await api.user.getProfile();
 	const stats = await api.user.getStats();
-	const recentApps = await api.user.getRecentApplications({ limit: 5 });
 	const badges = await api.user.getMyBadges();
 	const tier = tierForLevel(userProfile.level);
 	const progress = xpProgressInLevel(userProfile.xp);
@@ -148,45 +148,15 @@ export default async function ProfilePage() {
 
 			<BadgeGrid earned={badges.earned} all={badges.all} />
 
-			{recentApps.length > 0 && (
-				<div className="rpg-panel rpg-panel-ornate p-6">
-					<h2 className="rpg-heading mb-3 text-xl">📜 Recent Deeds</h2>
-					<div className="rpg-divider mb-4" />
-					<div className="space-y-3">
-						{recentApps.map((app) => (
-							<div
-								key={app.id}
-								className="rpg-scroll flex items-center justify-between p-3"
-							>
-								<div>
-									<p className="rpg-display font-medium text-[#f5f1e4]">
-										{app.internship.role} at{" "}
-										<span className="text-[#f4c430]">
-											{app.internship.company}
-										</span>
-									</p>
-									<p className="rpg-pixel mt-0.5 text-[9px] text-[#8a7a5a]">
-										{app.internship.location} ·{" "}
-										{new Date(app.appliedAt).toLocaleDateString()}
-									</p>
-								</div>
-								<span className="text-2xl text-[#10b981] drop-shadow-[0_0_6px_rgba(16,185,129,0.6)]">
-									✓
-								</span>
-							</div>
-						))}
+			<Suspense
+				fallback={
+					<div className="rpg-panel rpg-panel-ornate p-6 text-center">
+						<p className="rpg-pixel text-[10px] text-[#8a7a5a]">Loading quest log…</p>
 					</div>
-				</div>
-			)}
-
-			{recentApps.length === 0 && (
-				<EmptyState
-					emoji="📋"
-					title="Your ledger is empty"
-					flavor="Claim a quest from the board to begin your legend."
-					cta={{ href: "/", label: "To the Quest Board" }}
-				/>
-			)}
+				}
+			>
+				<QuestLog />
+			</Suspense>
 		</div>
 	);
 }

@@ -5,7 +5,42 @@ export const XP_REWARDS = {
 	DAILY_STREAK_CAP: 7,
 	PROFILE_COMPLETE: 25,
 	FIRST_BADGE: 50,
+	PHONE_SCREEN: 15,
+	INTERVIEW: 25,
+	FINAL_ROUND: 40,
+	OFFER: 100,
+	REJECTION: 5,
 } as const;
+
+export const APPLICATION_STATUSES = [
+	"APPLIED",
+	"PHONE_SCREEN",
+	"INTERVIEW",
+	"FINAL_ROUND",
+	"OFFER",
+	"REJECTED",
+	"GHOSTED",
+] as const;
+
+export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
+
+export const STATUS_ORDER: Record<ApplicationStatus, number> = {
+	APPLIED: 0,
+	PHONE_SCREEN: 1,
+	INTERVIEW: 2,
+	FINAL_ROUND: 3,
+	OFFER: 4,
+	REJECTED: 4,
+	GHOSTED: 4,
+};
+
+export const STATUS_XP: Partial<Record<ApplicationStatus, number>> = {
+	PHONE_SCREEN: XP_REWARDS.PHONE_SCREEN,
+	INTERVIEW: XP_REWARDS.INTERVIEW,
+	FINAL_ROUND: XP_REWARDS.FINAL_ROUND,
+	OFFER: XP_REWARDS.OFFER,
+	REJECTED: XP_REWARDS.REJECTION,
+};
 
 export type Tier = "Rookie" | "Squire" | "Knight" | "Hero" | "Legend";
 

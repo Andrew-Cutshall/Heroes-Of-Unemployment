@@ -10789,6 +10789,7 @@ export namespace Prisma {
     userId: string | null
     internshipId: string | null
     appliedAt: Date | null
+    status: string | null
   }
 
   export type CompletedApplicationMaxAggregateOutputType = {
@@ -10796,6 +10797,7 @@ export namespace Prisma {
     userId: string | null
     internshipId: string | null
     appliedAt: Date | null
+    status: string | null
   }
 
   export type CompletedApplicationCountAggregateOutputType = {
@@ -10803,6 +10805,7 @@ export namespace Prisma {
     userId: number
     internshipId: number
     appliedAt: number
+    status: number
     _all: number
   }
 
@@ -10812,6 +10815,7 @@ export namespace Prisma {
     userId?: true
     internshipId?: true
     appliedAt?: true
+    status?: true
   }
 
   export type CompletedApplicationMaxAggregateInputType = {
@@ -10819,6 +10823,7 @@ export namespace Prisma {
     userId?: true
     internshipId?: true
     appliedAt?: true
+    status?: true
   }
 
   export type CompletedApplicationCountAggregateInputType = {
@@ -10826,6 +10831,7 @@ export namespace Prisma {
     userId?: true
     internshipId?: true
     appliedAt?: true
+    status?: true
     _all?: true
   }
 
@@ -10906,6 +10912,7 @@ export namespace Prisma {
     userId: string
     internshipId: string
     appliedAt: Date
+    status: string
     _count: CompletedApplicationCountAggregateOutputType | null
     _min: CompletedApplicationMinAggregateOutputType | null
     _max: CompletedApplicationMaxAggregateOutputType | null
@@ -10930,6 +10937,7 @@ export namespace Prisma {
     userId?: boolean
     internshipId?: boolean
     appliedAt?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     internship?: boolean | InternshipDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["completedApplication"]>
@@ -10939,6 +10947,7 @@ export namespace Prisma {
     userId?: boolean
     internshipId?: boolean
     appliedAt?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     internship?: boolean | InternshipDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["completedApplication"]>
@@ -10948,6 +10957,7 @@ export namespace Prisma {
     userId?: boolean
     internshipId?: boolean
     appliedAt?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     internship?: boolean | InternshipDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["completedApplication"]>
@@ -10957,9 +10967,10 @@ export namespace Prisma {
     userId?: boolean
     internshipId?: boolean
     appliedAt?: boolean
+    status?: boolean
   }
 
-  export type CompletedApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "internshipId" | "appliedAt", ExtArgs["result"]["completedApplication"]>
+  export type CompletedApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "internshipId" | "appliedAt" | "status", ExtArgs["result"]["completedApplication"]>
   export type CompletedApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     internship?: boolean | InternshipDefaultArgs<ExtArgs>
@@ -10984,6 +10995,7 @@ export namespace Prisma {
       userId: string
       internshipId: string
       appliedAt: Date
+      status: string
     }, ExtArgs["result"]["completedApplication"]>
     composites: {}
   }
@@ -11413,6 +11425,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"CompletedApplication", 'String'>
     readonly internshipId: FieldRef<"CompletedApplication", 'String'>
     readonly appliedAt: FieldRef<"CompletedApplication", 'DateTime'>
+    readonly status: FieldRef<"CompletedApplication", 'String'>
   }
     
 
@@ -11953,7 +11966,8 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     internshipId: 'internshipId',
-    appliedAt: 'appliedAt'
+    appliedAt: 'appliedAt',
+    status: 'status'
   };
 
   export type CompletedApplicationScalarFieldEnum = (typeof CompletedApplicationScalarFieldEnum)[keyof typeof CompletedApplicationScalarFieldEnum]
@@ -12615,6 +12629,7 @@ export namespace Prisma {
     userId?: StringFilter<"CompletedApplication"> | string
     internshipId?: StringFilter<"CompletedApplication"> | string
     appliedAt?: DateTimeFilter<"CompletedApplication"> | Date | string
+    status?: StringFilter<"CompletedApplication"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     internship?: XOR<InternshipScalarRelationFilter, InternshipWhereInput>
   }
@@ -12624,6 +12639,7 @@ export namespace Prisma {
     userId?: SortOrder
     internshipId?: SortOrder
     appliedAt?: SortOrder
+    status?: SortOrder
     user?: UserOrderByWithRelationInput
     internship?: InternshipOrderByWithRelationInput
   }
@@ -12637,6 +12653,7 @@ export namespace Prisma {
     userId?: StringFilter<"CompletedApplication"> | string
     internshipId?: StringFilter<"CompletedApplication"> | string
     appliedAt?: DateTimeFilter<"CompletedApplication"> | Date | string
+    status?: StringFilter<"CompletedApplication"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     internship?: XOR<InternshipScalarRelationFilter, InternshipWhereInput>
   }, "id" | "userId_internshipId">
@@ -12646,6 +12663,7 @@ export namespace Prisma {
     userId?: SortOrder
     internshipId?: SortOrder
     appliedAt?: SortOrder
+    status?: SortOrder
     _count?: CompletedApplicationCountOrderByAggregateInput
     _max?: CompletedApplicationMaxOrderByAggregateInput
     _min?: CompletedApplicationMinOrderByAggregateInput
@@ -12659,6 +12677,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"CompletedApplication"> | string
     internshipId?: StringWithAggregatesFilter<"CompletedApplication"> | string
     appliedAt?: DateTimeWithAggregatesFilter<"CompletedApplication"> | Date | string
+    status?: StringWithAggregatesFilter<"CompletedApplication"> | string
   }
 
   export type AccountCreateInput = {
@@ -13310,6 +13329,7 @@ export namespace Prisma {
   export type CompletedApplicationCreateInput = {
     id?: string
     appliedAt?: Date | string
+    status?: string
     user: UserCreateNestedOneWithoutCompletedApplicationsInput
     internship: InternshipCreateNestedOneWithoutCompletedApplicationsInput
   }
@@ -13319,11 +13339,13 @@ export namespace Prisma {
     userId: string
     internshipId: string
     appliedAt?: Date | string
+    status?: string
   }
 
   export type CompletedApplicationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutCompletedApplicationsNestedInput
     internship?: InternshipUpdateOneRequiredWithoutCompletedApplicationsNestedInput
   }
@@ -13333,6 +13355,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     internshipId?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type CompletedApplicationCreateManyInput = {
@@ -13340,11 +13363,13 @@ export namespace Prisma {
     userId: string
     internshipId: string
     appliedAt?: Date | string
+    status?: string
   }
 
   export type CompletedApplicationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type CompletedApplicationUncheckedUpdateManyInput = {
@@ -13352,6 +13377,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     internshipId?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -13944,6 +13970,7 @@ export namespace Prisma {
     userId?: SortOrder
     internshipId?: SortOrder
     appliedAt?: SortOrder
+    status?: SortOrder
   }
 
   export type CompletedApplicationMaxOrderByAggregateInput = {
@@ -13951,6 +13978,7 @@ export namespace Prisma {
     userId?: SortOrder
     internshipId?: SortOrder
     appliedAt?: SortOrder
+    status?: SortOrder
   }
 
   export type CompletedApplicationMinOrderByAggregateInput = {
@@ -13958,6 +13986,7 @@ export namespace Prisma {
     userId?: SortOrder
     internshipId?: SortOrder
     appliedAt?: SortOrder
+    status?: SortOrder
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -14870,6 +14899,7 @@ export namespace Prisma {
   export type CompletedApplicationCreateWithoutUserInput = {
     id?: string
     appliedAt?: Date | string
+    status?: string
     internship: InternshipCreateNestedOneWithoutCompletedApplicationsInput
   }
 
@@ -14877,6 +14907,7 @@ export namespace Prisma {
     id?: string
     internshipId: string
     appliedAt?: Date | string
+    status?: string
   }
 
   export type CompletedApplicationCreateOrConnectWithoutUserInput = {
@@ -14994,6 +15025,7 @@ export namespace Prisma {
     userId?: StringFilter<"CompletedApplication"> | string
     internshipId?: StringFilter<"CompletedApplication"> | string
     appliedAt?: DateTimeFilter<"CompletedApplication"> | Date | string
+    status?: StringFilter<"CompletedApplication"> | string
   }
 
   export type UserBadgeUpsertWithWhereUniqueWithoutUserInput = {
@@ -15044,6 +15076,7 @@ export namespace Prisma {
   export type CompletedApplicationCreateWithoutInternshipInput = {
     id?: string
     appliedAt?: Date | string
+    status?: string
     user: UserCreateNestedOneWithoutCompletedApplicationsInput
   }
 
@@ -15051,6 +15084,7 @@ export namespace Prisma {
     id?: string
     userId: string
     appliedAt?: Date | string
+    status?: string
   }
 
   export type CompletedApplicationCreateOrConnectWithoutInternshipInput = {
@@ -15590,6 +15624,7 @@ export namespace Prisma {
     id?: string
     internshipId: string
     appliedAt?: Date | string
+    status?: string
   }
 
   export type UserBadgeCreateManyUserInput = {
@@ -15664,6 +15699,7 @@ export namespace Prisma {
   export type CompletedApplicationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
     internship?: InternshipUpdateOneRequiredWithoutCompletedApplicationsNestedInput
   }
 
@@ -15671,12 +15707,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     internshipId?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type CompletedApplicationUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     internshipId?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserBadgeUpdateWithoutUserInput = {
@@ -15701,11 +15739,13 @@ export namespace Prisma {
     id?: string
     userId: string
     appliedAt?: Date | string
+    status?: string
   }
 
   export type CompletedApplicationUpdateWithoutInternshipInput = {
     id?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutCompletedApplicationsNestedInput
   }
 
@@ -15713,12 +15753,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type CompletedApplicationUncheckedUpdateManyWithoutInternshipInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
   }
 
   export type InternshipCreateManyCategoryInput = {
