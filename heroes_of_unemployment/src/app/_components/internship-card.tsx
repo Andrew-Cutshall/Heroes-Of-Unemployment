@@ -93,14 +93,19 @@ export function InternshipCard({
 			}
 		},
 		onError: (error) => {
-			const [value, message] = error.message.split("|");
-			toast.error(message);
-			const numVal = value ? parseInt(value) : 25;
-            setIsPenalized(true); //Penalty Trigger
-			setPenaltyVal(numVal); // Amount lost
+			if (error.message.includes("|")) {
+				const [value, message] = error.message.split("|");
+				const numVal = value ? parseInt(value) : 25;
+				setIsPenalized(true); //Penalty Trigger
+				setPenaltyVal(numVal); // Amount lost
+				toast.error(message);
+			}
+			else {
+				toast.error(error.message);
+			}
 			setTimeout(() => {
 				setIsPenalized(false);
-				setHasOpenedLink(false);}, 800);
+				setHasOpenedLink(false);}, 1500);
 			void utils.application.getMyStats.invalidate();
 		},
 	});

@@ -30,7 +30,6 @@ export function NavBar() {
 	const handleSignOut = async () => {
 		await signOut({ redirect: false });
 		router.refresh();
-		router.push("/");
 	};
 
 	const linkClass = (active: boolean) =>
