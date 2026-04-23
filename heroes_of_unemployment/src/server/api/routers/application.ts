@@ -7,12 +7,20 @@ import {
 import { z } from "zod";
 import {
 	XP_REWARDS,
+	APPLICATION_STATUSES,
+	STATUS_ORDER,
+	STATUS_XP,
+	type ApplicationStatus,
 	levelForXp,
 	tierForLevel,
 	xpProgressInLevel,
 	streakBonus,
 } from "H_o_R/server/lib/leveling";
-import { evaluateBadges, type BadgeCode } from "H_o_R/server/lib/badges";
+import {
+	evaluateBadges,
+	evaluatePipelineBadges,
+	type BadgeCode,
+} from "H_o_R/server/lib/badges";
 
 function isProfileComplete(user: {
 	bio: string | null;
@@ -170,6 +178,113 @@ export const applicationRouter = createTRPCRouter({
 					level: finalLevel,
 					levelUp: finalLevel > oldLevel,
 					xpAwarded,
+					newBadges: newBadges.map((b) => ({
+						code: b.code,
+						name: b.name,
+						emoji: b.emoji,
+						description: b.description,
+						tier: b.tier,
+					})),
+				};
+			});
+		}),
+
+	updateStatus: protectedProcedure
+		.input(
+			z.object({
+				applicationId: z.string(),
+				status: z.enum(APPLICATION_STATUSES),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const userId = ctx.session.user.id;
+
+			return ctx.db.$transaction(async (tx) => {
+				const app = await tx.completedApplication.findUnique({
+					where: { id: input.applicationId },
+					select: { userId: true, status: true },
+				});
+				if (!app || app.userId !== userId) {
+					throw new Error("Application not found");
+				}
+
+				const currentStatus = app.status as ApplicationStatus;
+				const newStatus = input.status;
+				const isProgression =
+					STATUS_ORDER[newStatus] > STATUS_ORDER[currentStatus];
+
+				await tx.completedApplication.update({
+					where: { id: input.applicationId },
+					data: { status: newStatus },
+				});
+
+				if (!isProgression) {
+					return { xpAwarded: 0, newBadges: [], levelUp: false, level: 0 };
+				}
+
+				let xpAwarded = STATUS_XP[newStatus] ?? 0;
+
+				const preUser = await tx.user.findUniqueOrThrow({
+					where: { id: userId },
+					select: { xp: true, level: true },
+				});
+				const oldLevel = preUser.level;
+
+				const allApps = await tx.completedApplication.findMany({
+					where: { userId },
+					select: { status: true },
+				});
+
+				const earnedRows = await tx.userBadge.findMany({
+					where: { userId },
+					select: { badge: { select: { code: true } } },
+				});
+				const alreadyEarnedCodes = new Set(
+					earnedRows.map((r) => r.badge.code),
+				);
+				const hadZeroBadges = alreadyEarnedCodes.size === 0;
+
+				const newBadgeCodes = evaluatePipelineBadges({
+					hasPhoneScreen: allApps.some(
+						(a) =>
+							STATUS_ORDER[a.status as ApplicationStatus] >=
+							STATUS_ORDER["PHONE_SCREEN"],
+					),
+					hasInterview: allApps.some(
+						(a) =>
+							STATUS_ORDER[a.status as ApplicationStatus] >=
+							STATUS_ORDER["INTERVIEW"],
+					),
+					hasOffer: allApps.some((a) => a.status === "OFFER"),
+					rejectionCount: allApps.filter((a) => a.status === "REJECTED").length,
+					alreadyEarnedCodes,
+				});
+
+				const newBadges = newBadgeCodes.length
+					? await tx.badge.findMany({ where: { code: { in: newBadgeCodes } } })
+					: [];
+
+				let badgeXp = 0;
+				for (const b of newBadges) {
+					badgeXp += b.xpReward;
+					await tx.userBadge.create({ data: { userId, badgeId: b.id } });
+				}
+				if (hadZeroBadges && newBadges.length > 0) {
+					badgeXp += XP_REWARDS.FIRST_BADGE;
+				}
+				xpAwarded += badgeXp;
+
+				const finalXp = preUser.xp + xpAwarded;
+				const finalLevel = levelForXp(finalXp);
+				await tx.user.update({
+					where: { id: userId },
+					data: { xp: finalXp, level: finalLevel },
+				});
+
+				return {
+					xpAwarded,
+					level: finalLevel,
+					levelUp: finalLevel > oldLevel,
 					newBadges: newBadges.map((b) => ({
 						code: b.code,
 						name: b.name,

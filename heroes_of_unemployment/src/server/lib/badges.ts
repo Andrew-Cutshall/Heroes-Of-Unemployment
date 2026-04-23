@@ -7,6 +7,10 @@ export const BADGE_CODES = {
 	PROFILE_COMPLETE: "PROFILE_COMPLETE",
 	EARLY_BIRD: "EARLY_BIRD",
 	EXPLORER: "EXPLORER",
+	PHONE_SCREEN_EARNED: "PHONE_SCREEN_EARNED",
+	INTERVIEW_EARNED: "INTERVIEW_EARNED",
+	OFFER_RECEIVED: "OFFER_RECEIVED",
+	BATTLE_HARDENED: "BATTLE_HARDENED",
 } as const;
 
 export type BadgeCode = (typeof BADGE_CODES)[keyof typeof BADGE_CODES];
@@ -85,6 +89,38 @@ export const BADGE_DEFINITIONS: BadgeDefinition[] = [
 		xpReward: 40,
 		tier: "silver",
 	},
+	{
+		code: "PHONE_SCREEN_EARNED",
+		name: "Called to Arms",
+		description: "Landed your first phone screen.",
+		emoji: "📞",
+		xpReward: 30,
+		tier: "bronze",
+	},
+	{
+		code: "INTERVIEW_EARNED",
+		name: "Proving Grounds",
+		description: "Reached the interview stage.",
+		emoji: "⚔️",
+		xpReward: 50,
+		tier: "silver",
+	},
+	{
+		code: "OFFER_RECEIVED",
+		name: "Victorious",
+		description: "Received a job offer.",
+		emoji: "🏆",
+		xpReward: 200,
+		tier: "gold",
+	},
+	{
+		code: "BATTLE_HARDENED",
+		name: "Battle Hardened",
+		description: "Weathered 5 rejections and kept going.",
+		emoji: "🛡️",
+		xpReward: 25,
+		tier: "bronze",
+	},
 ];
 
 export interface UserStatsForBadges {
@@ -95,6 +131,30 @@ export interface UserStatsForBadges {
 	profileComplete: boolean;
 	appliedToRecentPostingWithin3Days: boolean;
 	alreadyEarnedCodes: Set<string>;
+}
+
+export interface PipelineStatsForBadges {
+	hasPhoneScreen: boolean;
+	hasInterview: boolean;
+	hasOffer: boolean;
+	rejectionCount: number;
+	alreadyEarnedCodes: Set<string>;
+}
+
+export function evaluatePipelineBadges(
+	stats: PipelineStatsForBadges,
+): BadgeCode[] {
+	const earned: BadgeCode[] = [];
+	const check = (code: BadgeCode, qualifies: boolean) => {
+		if (qualifies && !stats.alreadyEarnedCodes.has(code)) {
+			earned.push(code);
+		}
+	};
+	check("PHONE_SCREEN_EARNED", stats.hasPhoneScreen);
+	check("INTERVIEW_EARNED", stats.hasInterview);
+	check("OFFER_RECEIVED", stats.hasOffer);
+	check("BATTLE_HARDENED", stats.rejectionCount >= 5);
+	return earned;
 }
 
 export function evaluateBadges(stats: UserStatsForBadges): BadgeCode[] {

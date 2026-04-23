@@ -211,7 +211,8 @@ exports.Prisma.CompletedApplicationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   internshipId: 'internshipId',
-  appliedAt: 'appliedAt'
+  appliedAt: 'appliedAt',
+  status: 'status'
 };
 
 exports.Prisma.SortOrder = {

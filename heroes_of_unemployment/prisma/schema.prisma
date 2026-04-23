@@ -127,6 +127,7 @@ model CompletedApplication {
     userId       String
     internshipId String
     appliedAt    DateTime @default(now())
+    status       String   @default("APPLIED")
 
     user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
     internship Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
