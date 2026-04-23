@@ -93,14 +93,19 @@ export function InternshipCard({
 			}
 		},
 		onError: (error) => {
-			const [value, message] = error.message.split("|");
-			toast.error(message);
-			const numVal = value ? parseInt(value) : 25;
-            setIsPenalized(true); //Penalty Trigger
-			setPenaltyVal(numVal); // Amount lost
+			if (error.message.includes("|")) {
+				const [value, message] = error.message.split("|");
+				const numVal = value ? parseInt(value) : 25;
+				setIsPenalized(true); //Penalty Trigger
+				setPenaltyVal(numVal); // Amount lost
+				toast.error(message);
+			}
+			else {
+				toast.error(error.message);
+			}
 			setTimeout(() => {
 				setIsPenalized(false);
-				setHasOpenedLink(false);}, 800);
+				setHasOpenedLink(false);}, 1500);
 			void utils.application.getMyStats.invalidate();
 		},
 	});
@@ -158,7 +163,7 @@ export function InternshipCard({
 					)}
 					{daysLeft === null && (
 						<span className="rpg-pixel rounded bg-slate-900/40 px-1.5 py-0.5 text-[9px] text-slate-400">
-							📜 Unknown deadline
+							📜 Rolling Application
 						</span>
 					)}
 				</div>

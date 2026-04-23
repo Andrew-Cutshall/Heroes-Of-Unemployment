@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { api } from "H_o_R/trpc/react";
 import { signOut, useSession } from "next-auth/react";
 import {xpProgressInLevel, tierForLevel } from "H_o_R/server/lib/leveling";
-
+import HerosOfUnemploymentLogo from "/images/HerosOfUnemploymentLogo.png";
 export function NavBar() {
 	const pathname = usePathname();
 	const router = useRouter();
@@ -29,11 +30,10 @@ export function NavBar() {
 	const handleSignOut = async () => {
 		await signOut({ redirect: false });
 		router.refresh();
-		router.push("/");
 	};
 
 	const linkClass = (active: boolean) =>
-		`rpg-display text-sm transition ${
+		`rpg-display text-base transition ${
 			active
 				? "text-[#f4c430] drop-shadow-[0_0_6px_rgba(244,196,48,0.6)]"
 				: "text-[#cbb9a0] hover:text-[#f4c430]"
@@ -75,7 +75,13 @@ export function NavBar() {
 						href="/"
 						className="rpg-heading text-lg drop-shadow-[0_0_8px_rgba(244,196,48,0.4)]"
 					>
-						⚜ Heroes of Unemployment
+						<Image
+							src="/images/HerosOfUnemploymentLogo.png"
+							width={80}
+							height={80}
+							alt="⚜ Heroes of Unemployment"
+							className="rounded-full border border-[#d4af37]/50 shadow-[0_0_10px_rgba(244,196,48,0.3)]"
+                        />
 					</Link>
 					<div className="hidden gap-5 md:flex">{navLinks}</div>
 				</div>
